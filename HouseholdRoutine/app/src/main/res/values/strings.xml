@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Household Routine</string>
+
+    <!-- menü einträge -->
+    <string name="action_settings">Settings</string>
+</resources>
