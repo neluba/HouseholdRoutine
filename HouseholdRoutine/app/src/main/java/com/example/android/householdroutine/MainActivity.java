@@ -1,17 +1,45 @@
 package com.example.android.householdroutine;
 
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView mRecyclerView;
+    private ConstraintLayout mRemindersCompleted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_main);
+        mRemindersCompleted = (ConstraintLayout) findViewById(R.id.reminders_completed);
+
+        hideRecyclerView();
+
+    }
+
+    /**
+     * Hides the recyclerView and shows a message that no reminders are currently set
+     */
+    private void hideRecyclerView() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mRemindersCompleted.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Shows the recyclerView and hides the "no reminders set" message
+     */
+    private void showRecyclerView() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mRemindersCompleted.setVisibility(View.INVISIBLE);
     }
 
 

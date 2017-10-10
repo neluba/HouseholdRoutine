@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">Household Routine</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="end_date">Endet am:</string>
+    <string name="reminders_completed_description">Erstelle neue Erinnerungen um deine Aufgaben zu regeln</string>
+    <string name="reminders_completed_label">Keine Erinnerungen gesetzt</string>
 </resources>

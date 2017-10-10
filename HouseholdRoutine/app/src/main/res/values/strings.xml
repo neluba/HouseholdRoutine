@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Household Routine</string>
 
+    <!-- keine erinnerungen oder checklisten in der main activity -->
+    <string name="reminders_completed_label">No reminders set</string>
+    <string name="reminders_completed_description">Create new reminders to schedule your tasks</string>
+
     <!-- menü einträge -->
     <string name="action_settings">Settings</string>
+
+    <!-- list item -->
+    <string name="end_date">Ends at:</string>
+    <string name="date_example" translatable="false">10.10.2017 18:11</string>
+    <string name="title_example" translatable="false">Reminder title</string>
+    <string name="description_example" translatable="false">Lorem ipsum dolor sit amet</string>
 </resources>
