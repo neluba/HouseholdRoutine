@@ -1,18 +1,46 @@
 package com.example.android.householdroutine;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.android.householdroutine.data.DbContract;
+import com.example.android.householdroutine.utilities.FakeReminders;
 
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final int ID_MAINACTIVITY_LOADER = 13;
+
+    // Recyclerview variables
     private RecyclerView mRecyclerView;
     private ConstraintLayout mRemindersCompleted;
+    private MainRecyclerViewAdapter mAdapter;
+    private int mPosition = RecyclerView.NO_POSITION;
+
+    // Columns that will be used for showing data in the MainActivity
+    public static final String[] MAIN_ACTIVITY_PROJECTION = {
+            DbContract.RemindersEntry.COLUMN_NAME,
+            DbContract.RemindersEntry.COLUMN_DESCRIPTION,
+            DbContract.RemindersEntry.COLUMN_END_DATE,
+            DbContract.RemindersEntry.COLUMN_TYPE};
+
+    // Index values for the columns used for the recyclerview
+    public static final int INDEX_NAME = 0;
+    public static final int INDEX_DESCRIPTION = 1;
+    public static final int INDEX_END_DATE = 2;
+    public static final int INDEX_TYPE = 3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +50,21 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_main);
         mRemindersCompleted = (ConstraintLayout) findViewById(R.id.reminders_completed);
 
+        // initialize recyclerview
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+
+        mAdapter = new MainRecyclerViewAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+
+        // the loader will eventually show the RecyclerView
         hideRecyclerView();
+        // DEBUG ONLY - muss noch entfernt werden!!
+        FakeReminders.insertFakeData(this);
+        // initialize the cursorLoader
+        getSupportLoaderManager().initLoader(ID_MAINACTIVITY_LOADER, null, this);
 
     }
 
@@ -60,10 +102,63 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_settings) {
-            // TODO
+        if (id == R.id.action_settings) {
+            // TODO menü fertig stellen
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Gets automatically started by a background thread to load all reminders, that are not outdated, from the database
+     *
+     * @param loaderId
+     * @param bundle
+     * @return
+     */
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
+
+        switch (loaderId) {
+            case ID_MAINACTIVITY_LOADER:
+                Uri contentUri = DbContract.RemindersEntry.CONTENT_URI;
+                String sortOrder = DbContract.RemindersEntry.COLUMN_END_DATE + " ASC";
+
+                return new CursorLoader(this,
+                        contentUri,
+                        MAIN_ACTIVITY_PROJECTION,
+                        DbContract.RemindersEntry.COLUMN_OUTDATED + "= 0",
+                        null,
+                        sortOrder);
+            default:
+                throw new RuntimeException("Unknown loader id: " + loaderId);
+        }
+    }
+
+    /**
+     * Will be executed, when the loader has finished loading its data.
+     * Swaps the RecyclerView cursor and scrolls to the top of the list
+     *
+     * @param loader
+     * @param data
+     */
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION)
+            mPosition = 0;
+        mRecyclerView.smoothScrollToPosition(mPosition);
+        if (data.getCount() != 0)
+            showRecyclerView();
+
+    }
+
+    /**
+     * Automatically executed, when a loader is got reset. Makes the data invalid.
+     * @param loader
+     */
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 }

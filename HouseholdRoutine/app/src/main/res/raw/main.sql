@@ -6,6 +6,7 @@ CREATE TABLE "checklist" (
 "quantity"  INTEGER NOT NULL,
 "completed"  INTEGER NOT NULL
 );
+
 DROP TABLE IF EXISTS "reminders";
 CREATE TABLE "reminders" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -14,5 +15,6 @@ CREATE TABLE "reminders" (
 "checklist_id"  INTEGER NOT NULL,
 "startDate"  INTEGER NOT NULL,
 "endDate"  INTEGER NOT NULL,
-"outdated"  INTEGER NOT NULL
+"outdated"  INTEGER NOT NULL,
+"type"  INTEGER NOT NULL
 );

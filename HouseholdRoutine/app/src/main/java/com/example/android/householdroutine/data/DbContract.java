@@ -21,12 +21,24 @@ public class DbContract {
 
         public static final String TABLE_NAME = "reminders";
 
+        // reminder name -- string
         public static final String COLUMN_NAME = "name";
+        // reminder description -- string
         public static final String COLUMN_DESCRIPTION = "description";
+        // id of the checklist. -1 if it doesn't have a checklist. It needs to be set, when type is 1
+        // integer
         public static final String COLUMN_CHECKLIST = "checklist_id";
+        // start time in millis -- integer
         public static final String COLUMN_START_DATE = "startDate";
+        // end time in millis -- integer
         public static final String COLUMN_END_DATE = "endDate";
+        // 0 if the reminder is currently activ, otherwise 1 -- integer
         public static final String COLUMN_OUTDATED = "outdated";
+        // type = 0 for reminder and type = 1 for checklist -- integer
+        public static final String COLUMN_TYPE = "type";
+
+        public static final int TYPE_REMINDER = 0;
+        public static final int TYPE_CHECKLIST = 1;
 
         /**
          * Returns the content uri for a specific row using the id of a reminder
