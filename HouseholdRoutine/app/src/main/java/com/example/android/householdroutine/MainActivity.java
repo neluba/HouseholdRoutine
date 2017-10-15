@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -63,6 +64,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         hideRecyclerView();
         // DEBUG ONLY - muss noch entfernt werden!!
         FakeReminders.insertFakeData(this);
+
+        // fab initialize
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO neue seite um reminders zu erstellen
+                /*
+                Intent addReminderIntent = new Intent(MainActivity.this, ... .class);
+                startActivity(addReminderIntent);
+                 */
+            }
+        });
+
         // initialize the cursorLoader
         getSupportLoaderManager().initLoader(ID_MAINACTIVITY_LOADER, null, this);
 
@@ -155,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /**
      * Automatically executed, when a loader is got reset. Makes the data invalid.
+     *
      * @param loader
      */
     @Override
