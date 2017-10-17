@@ -93,7 +93,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         holder.descriptionView.setText(description);
         // end date
         long endDate = mCursor.getLong(MainActivity.INDEX_END_DATE);
-        // todo flags vielleicht noch richtig einstellen
         int flags = DateUtils.FORMAT_SHOW_DATE
                 | DateUtils.FORMAT_NUMERIC_DATE
                 | DateUtils.FORMAT_SHOW_YEAR

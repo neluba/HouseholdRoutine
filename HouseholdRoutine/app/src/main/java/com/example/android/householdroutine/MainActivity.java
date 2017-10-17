@@ -1,5 +1,6 @@
 package com.example.android.householdroutine;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,11 +71,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO neue seite um reminders zu erstellen
-                /*
-                Intent addReminderIntent = new Intent(MainActivity.this, ... .class);
+                Intent addReminderIntent = new Intent(MainActivity.this, CreateTask.class);
                 startActivity(addReminderIntent);
-                 */
             }
         });
 
