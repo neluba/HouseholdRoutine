@@ -24,7 +24,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class CreateTask extends AppCompatActivity {
 
@@ -41,15 +40,23 @@ public class CreateTask extends AppCompatActivity {
     private EditText ownChecklistAddItemName;
 
     private Calendar calendar = Calendar.getInstance();
-    private List<String> checklistItems;
+    private ArrayList<String> checklistItems;
 
-    // Todo Es muss alles gespeichert bleiben, wenn das smartphone gedreht wird. 
+    private static final String CHECKLIST_ITEMS_KEY = "items";
+    private static final String CALENDAR_TIME_KEY = "cal_time";
+    private static final String REMINDER_CHECKED_KEY = "reminder_checked";
+    private static final String CHECKLIST_CHECKED_KEY = "checklist_checked";
+    private static final String CHECKLIST_PREDEFINED_CHECKED_KEY = "cl_predefined_checked";
+    private static final String CHECKLIST_OWN_CHECKED_KEY = "cl_own_checked";
+
+
+    // TODO predefined reminders und checklists einbauen
+    // TODO alles am ende in die db schreiben und zurück in die main activity
+    // TODO Nach dem man einen eigenen checklisten eintrag hinzugefügt hat, soll die tastatur runter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
-
-        checklistItems = new ArrayList<String>();
 
         name = (EditText) findViewById(R.id.new_task_name);
         description = (EditText) findViewById(R.id.new_task_description);
@@ -62,6 +69,12 @@ public class CreateTask extends AppCompatActivity {
         checklistTypeOwn = (RadioButton) findViewById(R.id.new_task_checklist_type_button2);
         ownChecklistView = (LinearLayout) findViewById(R.id.new_task_checklist_type_own);
         ownChecklistAddItemName = (EditText) findViewById(R.id.own_checklist_add_item_name);
+
+        // Restore layout state after rotation
+        if (savedInstanceState != null)
+            restoreDataAfterRotation(savedInstanceState);
+        else
+            checklistItems = new ArrayList<String>();
 
         // end date date picker
         // source: https://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
@@ -109,7 +122,7 @@ public class CreateTask extends AppCompatActivity {
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
                         hourFormat
-                        ).show();
+                ).show();
             }
         });
 
@@ -117,13 +130,13 @@ public class CreateTask extends AppCompatActivity {
         reminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checklistView.setVisibility(View.INVISIBLE);
+                hideChecklistView();
             }
         });
         checklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checklistView.setVisibility(View.VISIBLE);
+                showChecklistView();
             }
         });
 
@@ -132,21 +145,91 @@ public class CreateTask extends AppCompatActivity {
         checklistTypePredefined.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ownChecklistView.setVisibility(View.INVISIBLE);
-                // predefined checklist VISIBLE
+                hideOwnChecklistView();
             }
         });
         checklistTypeOwn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ownChecklistView.setVisibility(View.VISIBLE);
-                // predefined cheecklist INVISIBLE
+                showOwnChecklistView();
             }
         });
+    }
 
+    /**
+     * Save state for screen rotation
+     *
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (checklistItems != null)
+            outState.putStringArrayList(CHECKLIST_ITEMS_KEY, checklistItems);
+
+        outState.putLong(CALENDAR_TIME_KEY, calendar.getTimeInMillis());
+
+        // radio boxes
+        outState.putBoolean(REMINDER_CHECKED_KEY, reminder.isChecked());
+        outState.putBoolean(CHECKLIST_CHECKED_KEY, checklist.isChecked());
+        outState.putBoolean(CHECKLIST_PREDEFINED_CHECKED_KEY, checklistTypePredefined.isChecked());
+        outState.putBoolean(CHECKLIST_OWN_CHECKED_KEY, checklistTypeOwn.isChecked());
 
     }
 
+    /**
+     * Restores the complete layout after a screen rotation
+     *
+     * @param savedInstanceState
+     */
+    private void restoreDataAfterRotation(Bundle savedInstanceState) {
+        if (savedInstanceState.containsKey(CHECKLIST_ITEMS_KEY))
+            checklistItems = savedInstanceState.getStringArrayList(CHECKLIST_ITEMS_KEY);
+        else
+            checklistItems = new ArrayList<String>();
+
+        if (savedInstanceState.containsKey(CALENDAR_TIME_KEY))
+            calendar.setTimeInMillis(savedInstanceState.getLong(CALENDAR_TIME_KEY));
+
+        // radio boxes
+        if (savedInstanceState.containsKey(REMINDER_CHECKED_KEY)) {
+            if (savedInstanceState.getBoolean(REMINDER_CHECKED_KEY)) {
+                // view anzeigen
+            }
+        }
+        if (savedInstanceState.containsKey(CHECKLIST_CHECKED_KEY)) {
+            if (savedInstanceState.getBoolean(CHECKLIST_CHECKED_KEY)) {
+                showChecklistView();
+            }
+        }
+        if (savedInstanceState.containsKey(CHECKLIST_PREDEFINED_CHECKED_KEY)) {
+            if (savedInstanceState.getBoolean(CHECKLIST_PREDEFINED_CHECKED_KEY)) {
+                // predefined checklist view anzeigen
+            }
+        }
+        if (savedInstanceState.containsKey(CHECKLIST_OWN_CHECKED_KEY)) {
+            if (savedInstanceState.getBoolean(CHECKLIST_OWN_CHECKED_KEY)) {
+                showOwnChecklistView();
+            }
+        }
+        // restore own checklist
+        if (checklistItems != null && checklistItems.size() > 0) {
+            LayoutInflater inflater = (LayoutInflater)
+                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            for (String item : checklistItems) {
+                final View checklistItemView = inflater
+                        .inflate(R.layout.create_task_checklist_item, null);
+
+                TextView itemTextView = (TextView) checklistItemView
+                        .findViewById(R.id.own_checklist_item_name);
+                itemTextView.setText(item);
+                ownChecklistView.addView(checklistItemView);
+            }
+        }
+
+
+    }
 
     // create menu
     @Override
@@ -166,6 +249,27 @@ public class CreateTask extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showChecklistView() {
+        checklistView.setVisibility(View.VISIBLE);
+        // predefined reminder INVISIBLE
+    }
+
+    private void hideChecklistView() {
+        checklistView.setVisibility(View.INVISIBLE);
+        // predefined reminder VISIBLE
+    }
+
+    private void showOwnChecklistView() {
+        ownChecklistView.setVisibility(View.VISIBLE);
+        // predefined checklist INVISIBLE
+    }
+
+    private void hideOwnChecklistView() {
+        ownChecklistView.setVisibility(View.INVISIBLE);
+        // predefined checklist VISIBLE
     }
 
     /**
@@ -188,11 +292,12 @@ public class CreateTask extends AppCompatActivity {
 
     /**
      * Adds own items to the linear layout for the checklist items
+     *
      * @param v
      */
     public void addItem(View v) {
         String name = ownChecklistAddItemName.getText().toString();
-        if(!TextUtils.isEmpty(name) && name != null) {
+        if (!TextUtils.isEmpty(name) && name != null) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View checklistItemView = inflater.inflate(R.layout.create_task_checklist_item, null);
 
@@ -208,6 +313,7 @@ public class CreateTask extends AppCompatActivity {
 
     /**
      * Removes an item from the linear view for checklist items
+     *
      * @param v
      */
     public void removeItem(View v) {
@@ -215,8 +321,8 @@ public class CreateTask extends AppCompatActivity {
         TextView itemTextView = (TextView) parent.findViewById(R.id.own_checklist_item_name);
         String name = itemTextView.getText().toString();
 
-        for(int i = 0; i < checklistItems.size(); i++) {
-            if(checklistItems.get(i).equals(name)) {
+        for (int i = 0; i < checklistItems.size(); i++) {
+            if (checklistItems.get(i).equals(name)) {
                 checklistItems.remove(i);
                 break;
             }
