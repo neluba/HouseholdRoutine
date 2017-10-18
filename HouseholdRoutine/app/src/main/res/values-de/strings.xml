@@ -13,4 +13,9 @@
     <string name="new_task_end_time_hint">Uhrzeit</string>
     <string name="new_task_type_checklist">Checkliste</string>
     <string name="new_task_type_reminder">Erinnerung</string>
+    <string name="new_task_checklist_label">Art der Checkliste</string>
+    <string name="new_task_checklist_own">Eigene Checkliste erstellen</string>
+    <string name="new_task_checklist_own_add_item">Eintrag hinzufügen</string>
+    <string name="new_task_checklist_type">Vorgefertigte Checkliste</string>
+    <string name="new_task_save">Speichern</string>
 </resources>
