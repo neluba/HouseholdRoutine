@@ -43,6 +43,7 @@ public class CreateTask extends AppCompatActivity {
     private Calendar calendar = Calendar.getInstance();
     private List<String> checklistItems;
 
+    // Todo Es muss alles gespeichert bleiben, wenn das smartphone gedreht wird. 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
