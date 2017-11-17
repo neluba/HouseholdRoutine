@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Locale;
+
 /**
  * Created by oliver on 06.10.2017.
  * This content provider implementation is close to the one that I learned on
@@ -21,6 +23,11 @@ public class DbContentProvider extends ContentProvider {
     public static final int CODE_REMINDERS = 100;
     public static final int CODE_REMINDERS_WITH_ID = 101;
     public static final int CODE_CHECKLIST = 200;
+    public static final int CODE_CHECKLIST_WITH_ID = 201;
+    public static final int CODE_PREDEFINED_REMINDERS = 300;
+    public static final int CODE_PREDEFINED_REMINDERS_WITH_ID = 301;
+    public static final int CODE_PREDEFINED_CHECKLIST = 400;
+    public static final int CODE_PREDEFINED_CHECKLIST_WITH_ID = 401;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DbHelper mDbOpenHelper;
@@ -38,6 +45,17 @@ public class DbContentProvider extends ContentProvider {
         matcher.addURI(authority, DbContract.PATH_REMINDERS + "/#", CODE_REMINDERS_WITH_ID);
         // URI : content//CONTENT_AUTHORITY/checklist
         matcher.addURI(authority, DbContract.PATH_CHECKLIST, CODE_CHECKLIST);
+        // URI : content://CONTENT_AUTHORITY/checklist/ */
+        matcher.addURI(authority, DbContract.PATH_CHECKLIST + "/#", CODE_CHECKLIST_WITH_ID);
+        // URI : content://CONTENT_AUTHORITY/predefined_reminders
+        matcher.addURI(authority, DbContract.PATH_PREDEFINED_REMINDERS, CODE_PREDEFINED_REMINDERS);
+        // URI : content://CONTENT_AUTHORITY/predefined_reminders/ */
+        matcher.addURI(authority, DbContract.PATH_PREDEFINED_REMINDERS + "/#/", CODE_PREDEFINED_REMINDERS_WITH_ID);
+        // URI : content//CONTENT_AUTHORITY/predefined_checklist
+        matcher.addURI(authority, DbContract.PATH_PREDEFINED_CHECKLIST, CODE_PREDEFINED_CHECKLIST);
+        // URI : content://CONTENT_AUTHORITY/predefined_checklist/ */
+        matcher.addURI(authority, DbContract.PATH_PREDEFINED_CHECKLIST + "/#", CODE_PREDEFINED_CHECKLIST_WITH_ID);
+
 
         return matcher;
     }
@@ -121,13 +139,13 @@ public class DbContentProvider extends ContentProvider {
                     sortOrder);
                 break;
             case CODE_REMINDERS_WITH_ID:
-                String id = uri.getLastPathSegment();
-                String[] selectionArg = new String[]{id};
+                String reminder_id = uri.getLastPathSegment();
+                String[] reminder_selectionArg = new String[]{reminder_id};
                 cursor = mDbOpenHelper.getReadableDatabase().query(
                         DbContract.RemindersEntry.TABLE_NAME,
                         projection,
                         DbContract.RemindersEntry._ID + "=?",
-                        selectionArg,
+                        reminder_selectionArg,
                         null,
                         null,
                         sortOrder);
@@ -139,6 +157,98 @@ public class DbContentProvider extends ContentProvider {
                         projection,
                         selection,
                         selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
+            case CODE_CHECKLIST_WITH_ID:
+                String checklist_id = uri.getLastPathSegment();
+                String[] checklist_selectionArg = new String[]{checklist_id};
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        DbContract.ChecklistEntry.TABLE_NAME,
+                        projection,
+                        DbContract.ChecklistEntry._ID + "=?",
+                        checklist_selectionArg,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
+            case CODE_PREDEFINED_REMINDERS:
+                String predefinedRemindersTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedRemindersTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedRemindersTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME;
+                }
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        predefinedRemindersTableName,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case CODE_PREDEFINED_REMINDERS_WITH_ID:
+                String predefinedRemindersIdTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedRemindersIdTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedRemindersIdTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME;
+                }
+                String predef_reminder_id = uri.getLastPathSegment();
+                String[] predef_reminder_selectionArg = new String[]{predef_reminder_id};
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        predefinedRemindersIdTableName,
+                        projection,
+                        DbContract.PredefinedRemindersEntry._ID + "=?",
+                        predef_reminder_selectionArg,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
+            case CODE_PREDEFINED_CHECKLIST:
+                String predefinedChecklistTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedChecklistTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedChecklistTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME;
+                }
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        predefinedChecklistTableName,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
+            case CODE_PREDEFINED_CHECKLIST_WITH_ID:
+                String predefinedChecklistIdTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedChecklistIdTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedChecklistIdTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME;
+                }
+                String predef_checklist_id = uri.getLastPathSegment();
+                String[] predef_checklist_selectionArg = new String[]{predef_checklist_id};
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        predefinedChecklistIdTableName,
+                        projection,
+                        DbContract.PredefinedChecklistEntry._ID + "=?",
+                        predef_checklist_selectionArg,
                         null,
                         null,
                         sortOrder);

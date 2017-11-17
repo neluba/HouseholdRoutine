@@ -44,11 +44,6 @@ public class DbContract {
          * Returns the content uri for a specific row using the id of a reminder
          * @param id reminder id
          */
-        public static Uri buildRemindersUriWithId(int id) {
-            return CONTENT_URI.buildUpon()
-                    .appendPath(Integer.toString(id))
-                    .build();
-        }
         public static Uri buildRemindersUriWithId(long id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(id))
@@ -67,25 +62,72 @@ public class DbContract {
         public static final String TABLE_NAME = "checklist";
 
         public static final String COLUMN_ITEM_NAME = "item_name";
-        public static final String COLUMN_PREDEFINED_ITEM_ID = "predefined_item_id";
         public static final String COLUMN_QUANTITY = "quantity";
+        public static final String REMINDER_ID = "reminder_id";
         public static final String COLUMN_COMPLETED = "completed";
 
         /**
          * Returns the content uri for a specific row using the id of a checklist
          * @param id reminder id
          */
-        public static Uri buildChecklistUriWithId(int id) {
-            return CONTENT_URI.buildUpon()
-                    .appendPath(Integer.toString(id))
-                    .build();
-        }
         public static Uri buildChecklistUriWithId(long id) {
             return CONTENT_URI.buildUpon()
                     .appendPath(Long.toString(id))
                     .build();
         }
     }
+
+    public static final String PATH_PREDEFINED_REMINDERS = "predefined_reminders";
+
+    public static final class PredefinedRemindersEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_PREDEFINED_REMINDERS)
+                .build();
+
+        public static final String TABLE_NAME = "predefined_reminders";
+        public static final String TABLE_NAME_DE = "predefined_reminders_de";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_CHECKLIST = "checklist";
+        public static final String COLUMN_TYPE = "type";
+
+        /**
+         * Returns the content uri for a specific row using the id of a reminder
+         * @param id reminder id
+         */
+        public static Uri buildUriWithId(long id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+    }
+
+    public static final String PATH_PREDEFINED_CHECKLIST = "predefined_checklist";
+
+    public static final class PredefinedChecklistEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_PREDEFINED_CHECKLIST)
+                .build();
+
+        public static final String TABLE_NAME = "predefined_checklist";
+        public static final String TABLE_NAME_DE = "predefined_checklist_de";
+
+        public static final String COLUMN_ITEM_NAME = "item_name";
+        public static final String COLUMN_QUANTITY = "quantity";
+        public static final String COLUMN_PREDEFINED_REMINDER_ID = "predefined_reminder_id";
+
+        /**
+         * Returns the content uri for a specific row using the id of a checklist
+         * @param id reminder id
+         */
+        public static Uri buildUriWithId(long id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+    }
+
 
 
 }

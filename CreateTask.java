@@ -43,6 +43,10 @@ public class CreateTask extends AppCompatActivity {
     private ArrayList<String> checklistItems;
 
     private static final String CHECKLIST_ITEMS_KEY = "items";
+    private static final String NAME_KEY = "name";
+    private static final String DESCRIPTION_KEY = "description";
+    private static final String END_DATE_KEY = "end_date";
+    private static final String END_TIME_KEY = "end_time";
     private static final String CALENDAR_TIME_KEY = "cal_time";
     private static final String REMINDER_CHECKED_KEY = "reminder_checked";
     private static final String CHECKLIST_CHECKED_KEY = "checklist_checked";
@@ -50,9 +54,7 @@ public class CreateTask extends AppCompatActivity {
     private static final String CHECKLIST_OWN_CHECKED_KEY = "cl_own_checked";
 
 
-    // TODO predefined reminders und checklists einbauen
-    // TODO alles am ende in die db schreiben und zurück in die main activity
-    // TODO Nach dem man einen eigenen checklisten eintrag hinzugefügt hat, soll die tastatur runter
+    // Todo Es muss alles gespeichert bleiben, wenn das smartphone gedreht wird.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,12 +166,22 @@ public class CreateTask extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         if (checklistItems != null)
             outState.putStringArrayList(CHECKLIST_ITEMS_KEY, checklistItems);
-
+        String nameString = name.getText().toString();
+        // first editText views
+        if (!TextUtils.isEmpty(nameString) && nameString != null)
+            outState.putString(NAME_KEY, nameString);
+        String descriptionString = description.getText().toString();
+        if (!TextUtils.isEmpty(descriptionString) && descriptionString != null)
+            outState.putString(DESCRIPTION_KEY, descriptionString);
+        String endDateString = endDate.getText().toString();
+        if (!TextUtils.isEmpty(endDateString) && endDateString != null)
+            outState.putString(END_DATE_KEY, endDateString);
+        String endTimeString = endTime.getText().toString();
+        if (!TextUtils.isEmpty(endTimeString) && endTimeString != null)
+            outState.putString(END_TIME_KEY, endTimeString);
         outState.putLong(CALENDAR_TIME_KEY, calendar.getTimeInMillis());
-
         // radio boxes
         outState.putBoolean(REMINDER_CHECKED_KEY, reminder.isChecked());
         outState.putBoolean(CHECKLIST_CHECKED_KEY, checklist.isChecked());
@@ -188,28 +200,43 @@ public class CreateTask extends AppCompatActivity {
             checklistItems = savedInstanceState.getStringArrayList(CHECKLIST_ITEMS_KEY);
         else
             checklistItems = new ArrayList<String>();
-
+        // first editText views
+        if (savedInstanceState.containsKey(NAME_KEY))
+            name.setText(savedInstanceState.getString(NAME_KEY));
+        if (savedInstanceState.containsKey(DESCRIPTION_KEY))
+            description.setText(savedInstanceState.getString(DESCRIPTION_KEY));
+        if (savedInstanceState.containsKey(END_DATE_KEY))
+            endDate.setText(savedInstanceState.getString(END_DATE_KEY));
+        if (savedInstanceState.containsKey(END_TIME_KEY))
+            endTime.setText(savedInstanceState.getString(END_TIME_KEY));
         if (savedInstanceState.containsKey(CALENDAR_TIME_KEY))
             calendar.setTimeInMillis(savedInstanceState.getLong(CALENDAR_TIME_KEY));
-
         // radio boxes
         if (savedInstanceState.containsKey(REMINDER_CHECKED_KEY)) {
             if (savedInstanceState.getBoolean(REMINDER_CHECKED_KEY)) {
+                reminder.setChecked(true);
+                checklist.setChecked(false);
                 // view anzeigen
             }
         }
         if (savedInstanceState.containsKey(CHECKLIST_CHECKED_KEY)) {
             if (savedInstanceState.getBoolean(CHECKLIST_CHECKED_KEY)) {
+                reminder.setChecked(false);
+                checklist.setChecked(true);
                 showChecklistView();
             }
         }
         if (savedInstanceState.containsKey(CHECKLIST_PREDEFINED_CHECKED_KEY)) {
             if (savedInstanceState.getBoolean(CHECKLIST_PREDEFINED_CHECKED_KEY)) {
-                // predefined checklist view anzeigen
+                checklistTypePredefined.setChecked(true);
+                checklistTypeOwn.setChecked(false);
+                showOwnChecklistView();
             }
         }
         if (savedInstanceState.containsKey(CHECKLIST_OWN_CHECKED_KEY)) {
             if (savedInstanceState.getBoolean(CHECKLIST_OWN_CHECKED_KEY)) {
+                checklistTypePredefined.setChecked(false);
+                checklistTypeOwn.setChecked(true);
                 showOwnChecklistView();
             }
         }
@@ -254,17 +281,15 @@ public class CreateTask extends AppCompatActivity {
 
     private void showChecklistView() {
         checklistView.setVisibility(View.VISIBLE);
-        // predefined reminder INVISIBLE
     }
 
     private void hideChecklistView() {
         checklistView.setVisibility(View.INVISIBLE);
-        // predefined reminder VISIBLE
     }
 
     private void showOwnChecklistView() {
         ownChecklistView.setVisibility(View.VISIBLE);
-        // predefined checklist INVISIBLE
+        // predefined cheecklist INVISIBLE
     }
 
     private void hideOwnChecklistView() {
@@ -297,7 +322,7 @@ public class CreateTask extends AppCompatActivity {
      */
     public void addItem(View v) {
         String name = ownChecklistAddItemName.getText().toString();
-        if (!TextUtils.isEmpty(name)) {
+        if (!TextUtils.isEmpty(name) && name != null) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View checklistItemView = inflater.inflate(R.layout.create_task_checklist_item, null);
 

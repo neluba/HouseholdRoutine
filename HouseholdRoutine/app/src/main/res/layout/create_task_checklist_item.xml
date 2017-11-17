@@ -24,6 +24,6 @@
         android:onClick="removeItem"
         android:scaleType="fitCenter"
         android:tint="@color/secondary_text"
-        app:srcCompat="@drawable/ic_clear_black_48dp" />
+        app:srcCompat="@drawable/ic_clear_black_48dp" android:contentDescription="TODO"/>
 
 </LinearLayout>
