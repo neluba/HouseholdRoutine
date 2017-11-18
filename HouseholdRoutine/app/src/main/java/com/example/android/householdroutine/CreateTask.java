@@ -3,8 +3,13 @@ package com.example.android.householdroutine;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,12 +25,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.android.householdroutine.data.DbContract;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateTask extends AppCompatActivity {
+public class CreateTask extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    public static final int ID_PREDEFINED_REMINDERS_LOADER = 14;
+    public static final int ID_PREDEFINED_CHECKLIST_LOADER = 15;
 
     private EditText name;
     private EditText description;
@@ -154,6 +164,11 @@ public class CreateTask extends AppCompatActivity {
                 showOwnChecklistView();
             }
         });
+
+
+        // initialize loader
+        getSupportLoaderManager().initLoader(ID_PREDEFINED_REMINDERS_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_PREDEFINED_CHECKLIST_LOADER, null, this);
     }
 
     /**
@@ -329,7 +344,62 @@ public class CreateTask extends AppCompatActivity {
         }
 
         ownChecklistView.removeView((View) v.getParent());
+    }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
+        Uri contentUri;
+
+        switch (loaderId) {
+            case ID_PREDEFINED_REMINDERS_LOADER:
+                contentUri = DbContract.PredefinedRemindersEntry.CONTENT_URI;
+
+                return new CursorLoader(this,
+                        contentUri,
+                        null,
+                        null,
+                        null,
+                        null);
+            case ID_PREDEFINED_CHECKLIST_LOADER:
+                contentUri = DbContract.PredefinedChecklistEntry.
+                        FULL_PREDEFINED_CHECKLIST_CONTENT_URI;
+                return new CursorLoader(this,
+                        contentUri,
+                        null,
+                        null,
+                        null,
+                        null);
+            default:
+                throw new RuntimeException("Unknown loader id: " + loaderId);
+        }
+    }
+
+    /**
+     * Will be executed, when the loader has finished loading its data.
+     * Swaps the RecyclerView cursor and scrolls to the top of the list
+     *
+     * @param loader
+     * @param data
+     */
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //mAdapter.swapCursor(data);
+        //if (mPosition == RecyclerView.NO_POSITION)
+        //    mPosition = 0;
+        //mRecyclerView.smoothScrollToPosition(mPosition);
+        //if (data.getCount() != 0)
+        //    showRecyclerView();
+
+    }
+
+    /**
+     * Automatically executed, when a loader is got reset. Makes the data invalid.
+     *
+     * @param loader
+     */
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // mAdapter.swapCursor(null);
     }
 }

@@ -28,6 +28,7 @@ public class DbContentProvider extends ContentProvider {
     public static final int CODE_PREDEFINED_REMINDERS_WITH_ID = 301;
     public static final int CODE_PREDEFINED_CHECKLIST = 400;
     public static final int CODE_PREDEFINED_CHECKLIST_WITH_ID = 401;
+    public static final int CODE_FULL_PREDEFINED_CHECKLIST = 500;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DbHelper mDbOpenHelper;
@@ -55,6 +56,8 @@ public class DbContentProvider extends ContentProvider {
         matcher.addURI(authority, DbContract.PATH_PREDEFINED_CHECKLIST, CODE_PREDEFINED_CHECKLIST);
         // URI : content://CONTENT_AUTHORITY/predefined_checklist/ */
         matcher.addURI(authority, DbContract.PATH_PREDEFINED_CHECKLIST + "/#", CODE_PREDEFINED_CHECKLIST_WITH_ID);
+        // URI : content:/CONTENT_AUTHORITY/full_predefined_checklist
+        matcher.addURI(authority, DbContract.PATH_FULL_PREDEFINED_CHECKLIST, CODE_FULL_PREDEFINED_CHECKLIST);
 
 
         return matcher;
@@ -202,13 +205,13 @@ public class DbContentProvider extends ContentProvider {
                     default:
                         predefinedRemindersIdTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME;
                 }
-                String predef_reminder_id = uri.getLastPathSegment();
-                String[] predef_reminder_selectionArg = new String[]{predef_reminder_id};
+                String predefined_reminder_id = uri.getLastPathSegment();
+                String[] predefined_reminder_selectionArg = new String[]{predefined_reminder_id};
                 cursor = mDbOpenHelper.getReadableDatabase().query(
                         predefinedRemindersIdTableName,
                         projection,
                         DbContract.PredefinedRemindersEntry._ID + "=?",
-                        predef_reminder_selectionArg,
+                        predefined_reminder_selectionArg,
                         null,
                         null,
                         sortOrder);
@@ -242,16 +245,42 @@ public class DbContentProvider extends ContentProvider {
                     default:
                         predefinedChecklistIdTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME;
                 }
-                String predef_checklist_id = uri.getLastPathSegment();
-                String[] predef_checklist_selectionArg = new String[]{predef_checklist_id};
+                String predefined_checklist_id = uri.getLastPathSegment();
+                String[] predefined_checklist_selectionArg = new String[]{predefined_checklist_id};
                 cursor = mDbOpenHelper.getReadableDatabase().query(
                         predefinedChecklistIdTableName,
                         projection,
                         DbContract.PredefinedChecklistEntry._ID + "=?",
-                        predef_checklist_selectionArg,
+                        predefined_checklist_selectionArg,
                         null,
                         null,
                         sortOrder);
+                break;
+
+            case CODE_FULL_PREDEFINED_CHECKLIST:
+                String predefRemindersTable;
+                String predefChecklistTable;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefRemindersTable = DbContract.PredefinedRemindersEntry.TABLE_NAME_DE;
+                        predefChecklistTable = DbContract.PredefinedChecklistEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefRemindersTable = DbContract.PredefinedRemindersEntry.TABLE_NAME;
+                        predefChecklistTable = DbContract.PredefinedChecklistEntry.TABLE_NAME;
+                }
+
+                String fullChecklistQuery = " select " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID + ", " +
+                        predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_NAME + ", " +
+                        predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION + ", " +
+                        predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAME + ", " +
+                        predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_QUANTITY +
+                        " from " + predefRemindersTable +
+                        " inner join " + predefChecklistTable +
+                        " on " + predefRemindersTable+ "." + DbContract.PredefinedRemindersEntry._ID +
+                        " = " + predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_PREDEFINED_REMINDER_ID +
+                        " where type = 1;";
+                cursor = mDbOpenHelper.getReadableDatabase().rawQuery(fullChecklistQuery, null);
                 break;
 
             default:

@@ -12,6 +12,11 @@ public class DbContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public  static final String PATH_REMINDERS = "reminders";
+    public static final String PATH_CHECKLIST = "checklist";
+    public static final String PATH_PREDEFINED_REMINDERS = "predefined_reminders";
+    public static final String PATH_PREDEFINED_CHECKLIST = "predefined_checklist";
+    public static final String PATH_FULL_PREDEFINED_CHECKLIST = "full_predefined_checklist";
+
 
     public static final class RemindersEntry implements BaseColumns {
         /** Base content URI for the reminders table  **/
@@ -51,7 +56,7 @@ public class DbContract {
         }
     }
 
-    public static final String PATH_CHECKLIST = "checklist";
+
 
     public static final class ChecklistEntry implements BaseColumns {
         // Base content URI for the checklist table
@@ -77,7 +82,7 @@ public class DbContract {
         }
     }
 
-    public static final String PATH_PREDEFINED_REMINDERS = "predefined_reminders";
+
 
     public static final class PredefinedRemindersEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
@@ -103,11 +108,14 @@ public class DbContract {
         }
     }
 
-    public static final String PATH_PREDEFINED_CHECKLIST = "predefined_checklist";
-
     public static final class PredefinedChecklistEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_PREDEFINED_CHECKLIST)
+                .build();
+
+        // Inner joins the predefined reminders table with the predefined checklist table
+        public static final Uri FULL_PREDEFINED_CHECKLIST_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_FULL_PREDEFINED_CHECKLIST)
                 .build();
 
         public static final String TABLE_NAME = "predefined_checklist";

@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "app.db";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
     private Context context;
 
     public DbHelper(Context context) {
@@ -61,9 +61,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        if(oldVersion < 5) {
+        if(oldVersion < 6) {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DbContract.RemindersEntry.TABLE_NAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DbContract.ChecklistEntry.TABLE_NAME);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DbContract.PredefinedRemindersEntry.TABLE_NAME);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DbContract.PredefinedRemindersEntry.TABLE_NAME_DE);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DbContract.PredefinedChecklistEntry.TABLE_NAME);
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DbContract.PredefinedChecklistEntry.TABLE_NAME_DE);
             onCreate(sqLiteDatabase);
         }
     }

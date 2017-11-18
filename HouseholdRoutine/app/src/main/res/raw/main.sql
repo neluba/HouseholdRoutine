@@ -9,7 +9,7 @@ CREATE TABLE "checklist" (
 
 DROP TABLE IF EXISTS "predefined_checklist";
 CREATE TABLE "predefined_checklist" (
-"_id"  INTEGER,
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "item_name"  TEXT(64),
 "quantity"  INTEGER,
 "predefined_reminder_id"  INTEGER
@@ -17,7 +17,7 @@ CREATE TABLE "predefined_checklist" (
 
 DROP TABLE IF EXISTS "predefined_checklist_de";
 CREATE TABLE "predefined_checklist_de" (
-"_id"  INTEGER,
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "item_name"  TEXT(64),
 "quantity"  INTEGER,
 "predefined_reminder_id"  INTEGER
@@ -37,7 +37,7 @@ CREATE TABLE "reminders" (
 
 DROP TABLE IF EXISTS "predefined_reminders";
 CREATE TABLE "predefined_reminders" (
-"_id"  INTEGER,
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "name"  TEXT(255),
 "description"  TEXT(5012),
 "checklist"  INTEGER,
@@ -46,7 +46,7 @@ CREATE TABLE "predefined_reminders" (
 
 DROP TABLE IF EXISTS "predefined_reminders_de";
 CREATE TABLE "predefined_reminders_de" (
-"_id"  INTEGER,
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "name"  TEXT(255),
 "description"  TEXT(5012),
 "checklist"  INTEGER,
