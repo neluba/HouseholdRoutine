@@ -83,7 +83,7 @@ public class DbContentProvider extends ContentProvider {
                 try {
                     for (ContentValues value : values) {
                         long _id = db.insert(DbContract.RemindersEntry.TABLE_NAME, null, value);
-                        if(_id != -1) {
+                        if (_id != -1) {
                             rows++;
                         }
                     }
@@ -102,7 +102,33 @@ public class DbContentProvider extends ContentProvider {
                 try {
                     for (ContentValues value : values) {
                         long _id = db.insert(DbContract.ChecklistEntry.TABLE_NAME, null, value);
-                        if(_id != -1) {
+                        if (_id != -1) {
+                            rows++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (rows > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rows;
+            case CODE_PREDEFINED_REMINDERS:
+                String predefinedRemindersTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedRemindersTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedRemindersTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME;
+                }
+                db.beginTransaction();
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(predefinedRemindersTableName, null, value);
+                        if (_id != -1) {
                             rows++;
                         }
                     }
@@ -133,13 +159,13 @@ public class DbContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CODE_REMINDERS:
                 cursor = mDbOpenHelper.getReadableDatabase().query(
-                    DbContract.RemindersEntry.TABLE_NAME,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null,
-                    null,
-                    sortOrder);
+                        DbContract.RemindersEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
                 break;
             case CODE_REMINDERS_WITH_ID:
                 String reminder_id = uri.getLastPathSegment();
@@ -190,7 +216,7 @@ public class DbContentProvider extends ContentProvider {
                 cursor = mDbOpenHelper.getReadableDatabase().query(
                         predefinedRemindersTableName,
                         projection,
-                        selection,
+                        DbContract.PredefinedRemindersEntry.COLUMN_TYPE + "=0",
                         selectionArgs,
                         null,
                         null,
@@ -210,7 +236,8 @@ public class DbContentProvider extends ContentProvider {
                 cursor = mDbOpenHelper.getReadableDatabase().query(
                         predefinedRemindersIdTableName,
                         projection,
-                        DbContract.PredefinedRemindersEntry._ID + "=?",
+                        DbContract.PredefinedRemindersEntry._ID + "=? AND " +
+                                DbContract.PredefinedRemindersEntry.COLUMN_TYPE + "=0",
                         predefined_reminder_selectionArg,
                         null,
                         null,
@@ -277,7 +304,7 @@ public class DbContentProvider extends ContentProvider {
                         predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_QUANTITY +
                         " from " + predefRemindersTable +
                         " inner join " + predefChecklistTable +
-                        " on " + predefRemindersTable+ "." + DbContract.PredefinedRemindersEntry._ID +
+                        " on " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID +
                         " = " + predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_PREDEFINED_REMINDER_ID +
                         " where type = 1;";
                 cursor = mDbOpenHelper.getReadableDatabase().rawQuery(fullChecklistQuery, null);
@@ -311,14 +338,14 @@ public class DbContentProvider extends ContentProvider {
         switch (match) {
             case CODE_REMINDERS:
                 _id = db.insert(DbContract.RemindersEntry.TABLE_NAME, null, contentValues);
-                if(_id >= 0) {
+                if (_id >= 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     return DbContract.RemindersEntry.buildRemindersUriWithId(_id);
                 } else
                     throw new SQLException("Insert error for uri: " + uri);
             case CODE_CHECKLIST:
                 _id = db.insert(DbContract.ChecklistEntry.TABLE_NAME, null, contentValues);
-                if(_id >= 0) {
+                if (_id >= 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
                     return DbContract.ChecklistEntry.buildChecklistUriWithId(_id);
                 } else
@@ -352,10 +379,24 @@ public class DbContentProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+            case CODE_PREDEFINED_REMINDERS:
+                String predefinedRemindersTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedRemindersTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedRemindersTableName = DbContract.PredefinedRemindersEntry.TABLE_NAME;
+                }
+                deletedRows = mDbOpenHelper.getWritableDatabase().delete(
+                        predefinedRemindersTableName,
+                        selection,
+                        selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unkown uri: " + uri);
         }
-        if(deletedRows != 0)
+        if (deletedRows != 0)
             getContext().getContentResolver().notifyChange(uri, null);
         return deletedRows;
     }

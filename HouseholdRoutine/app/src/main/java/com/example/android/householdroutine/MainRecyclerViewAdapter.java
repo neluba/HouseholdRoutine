@@ -105,7 +105,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
     @Override
     public int getItemCount() {
-        if(mCursor == null)
+        if (mCursor == null)
             return 0;
         return mCursor.getCount();
     }

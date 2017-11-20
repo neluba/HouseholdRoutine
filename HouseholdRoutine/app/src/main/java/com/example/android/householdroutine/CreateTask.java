@@ -11,6 +11,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,10 +34,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CreateTask extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class CreateTask extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int ID_PREDEFINED_REMINDERS_LOADER = 14;
     public static final int ID_PREDEFINED_CHECKLIST_LOADER = 15;
+
+    private RecyclerView mPredefinedRemindersRecyclerView;
+    private PredefinedRemindersRecyclerViewAdapter mPredefinedRemindersAdapter;
+    private int mPredefinedRemindersPosition = RecyclerView.NO_POSITION;
 
     private EditText name;
     private EditText description;
@@ -59,6 +65,15 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     private static final String CHECKLIST_PREDEFINED_CHECKED_KEY = "cl_predefined_checked";
     private static final String CHECKLIST_OWN_CHECKED_KEY = "cl_own_checked";
 
+    // Columns that will be used for showing data in the MainActivity
+    public static final String[] PREDEFINED_REMINDERS_PROJECTION = {
+            DbContract.PredefinedRemindersEntry.COLUMN_NAME,
+            DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION};
+
+    // Index values for the predefined reminders columns
+    public static final int PREDEF_REMINDERS_INDEX_NAME = 0;
+    public static final int PREDEF_REMINDERS_INDEX_DESCRIPTION = 1;
+
 
     // TODO predefined reminders und checklists einbauen
     // TODO alles am ende in die db schreiben und zurück in die main activity
@@ -79,6 +94,16 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         checklistTypeOwn = (RadioButton) findViewById(R.id.new_task_checklist_type_button2);
         ownChecklistView = (LinearLayout) findViewById(R.id.new_task_checklist_type_own);
         ownChecklistAddItemName = (EditText) findViewById(R.id.own_checklist_add_item_name);
+        mPredefinedRemindersRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_reminders);
+
+        // initialize predefined reminder recycler view
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mPredefinedRemindersRecyclerView.setLayoutManager(layoutManager);
+        mPredefinedRemindersRecyclerView.setHasFixedSize(true);
+        mPredefinedRemindersAdapter = new PredefinedRemindersRecyclerViewAdapter(this, name, description);
+        mPredefinedRemindersRecyclerView.setAdapter(mPredefinedRemindersAdapter);
+
 
         // Restore layout state after rotation
         if (savedInstanceState != null)
@@ -210,7 +235,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         // radio boxes
         if (savedInstanceState.containsKey(REMINDER_CHECKED_KEY)) {
             if (savedInstanceState.getBoolean(REMINDER_CHECKED_KEY)) {
-                // view anzeigen
+                hideChecklistView();
             }
         }
         if (savedInstanceState.containsKey(CHECKLIST_CHECKED_KEY)) {
@@ -269,12 +294,12 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
 
     private void showChecklistView() {
         checklistView.setVisibility(View.VISIBLE);
-        // predefined reminder INVISIBLE
+        mPredefinedRemindersRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void hideChecklistView() {
         checklistView.setVisibility(View.INVISIBLE);
-        // predefined reminder VISIBLE
+        mPredefinedRemindersRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void showOwnChecklistView() {
@@ -357,7 +382,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
 
                 return new CursorLoader(this,
                         contentUri,
-                        null,
+                        PREDEFINED_REMINDERS_PROJECTION,
                         null,
                         null,
                         null);
@@ -384,13 +409,14 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //mAdapter.swapCursor(data);
-        //if (mPosition == RecyclerView.NO_POSITION)
-        //    mPosition = 0;
-        //mRecyclerView.smoothScrollToPosition(mPosition);
-        //if (data.getCount() != 0)
-        //    showRecyclerView();
-
+        switch (loader.getId()) {
+            case ID_PREDEFINED_REMINDERS_LOADER:
+                mPredefinedRemindersAdapter.swapCursor(data);
+                if (mPredefinedRemindersPosition == RecyclerView.NO_POSITION)
+                    mPredefinedRemindersPosition = 0;
+                mPredefinedRemindersRecyclerView.smoothScrollToPosition(mPredefinedRemindersPosition);
+                break;
+        }
     }
 
     /**
@@ -400,6 +426,10 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
      */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // mAdapter.swapCursor(null);
+        switch (loader.getId()) {
+            case ID_PREDEFINED_REMINDERS_LOADER:
+                mPredefinedRemindersAdapter.swapCursor(null);
+                break;
+        }
     }
 }

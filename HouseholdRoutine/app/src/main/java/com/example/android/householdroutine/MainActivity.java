@@ -32,16 +32,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     // Columns that will be used for showing data in the MainActivity
     public static final String[] MAIN_ACTIVITY_PROJECTION = {
+            DbContract.RemindersEntry._ID,
             DbContract.RemindersEntry.COLUMN_NAME,
             DbContract.RemindersEntry.COLUMN_DESCRIPTION,
             DbContract.RemindersEntry.COLUMN_END_DATE,
             DbContract.RemindersEntry.COLUMN_TYPE};
 
     // Index values for the columns used for the recyclerview
-    public static final int INDEX_NAME = 0;
-    public static final int INDEX_DESCRIPTION = 1;
-    public static final int INDEX_END_DATE = 2;
-    public static final int INDEX_TYPE = 3;
+    public static final int INDEX_ID = 0;
+    public static final int INDEX_NAME = 1;
+    public static final int INDEX_DESCRIPTION = 2;
+    public static final int INDEX_END_DATE = 3;
+    public static final int INDEX_TYPE = 4;
 
 
     @Override
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // the loader will eventually show the RecyclerView
         hideRecyclerView();
-        // DEBUG ONLY - muss noch entfernt werden!!
+        // TODO DEBUG ONLY - muss noch entfernt werden!!
         FakeReminders.insertFakeData(this);
 
         // fab initialize

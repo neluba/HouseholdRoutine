@@ -18,4 +18,5 @@
     <string name="new_task_checklist_own_add_item">Eintrag hinzufügen</string>
     <string name="new_task_checklist_type">Vorgefertigte Checkliste</string>
     <string name="new_task_save">Speichern</string>
+    <string name="icon_description">Icon</string>
 </resources>

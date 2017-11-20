@@ -13,6 +13,7 @@
     <string name="date_example" translatable="false">10.10.2017 18:11</string>
     <string name="title_example" translatable="false">Reminder title</string>
     <string name="description_example" translatable="false">Lorem ipsum dolor sit amet</string>
+    <string name="icon_description">Icon</string>
 
     <!-- create new task -->
     <string name="new_task_title">Create a new task</string>
