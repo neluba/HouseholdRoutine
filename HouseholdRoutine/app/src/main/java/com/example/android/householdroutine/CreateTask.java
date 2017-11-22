@@ -39,9 +39,6 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     public static final int ID_PREDEFINED_REMINDERS_LOADER = 14;
     public static final int ID_PREDEFINED_CHECKLIST_LOADER = 15;
 
-    // Tag in the EditText View name, that saves a long value for the predefined checklist id
-    public static final int TAG_PREDEFINED_CHECKLIST_ID = 13;
-
     private RecyclerView mPredefinedRemindersRecyclerView;
     private PredefinedRemindersRecyclerViewAdapter mPredefinedRemindersAdapter;
     private int mPredefinedRemindersPosition = RecyclerView.NO_POSITION;
@@ -270,7 +267,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         }
         if (savedInstanceState.containsKey(CHECKLIST_PREDEFINED_CHECKED_KEY)) {
             if (savedInstanceState.getBoolean(CHECKLIST_PREDEFINED_CHECKED_KEY)) {
-                // predefined checklist view anzeigen
+                hideOwnChecklistView();
             }
         }
         if (savedInstanceState.containsKey(CHECKLIST_OWN_CHECKED_KEY)) {
@@ -310,7 +307,10 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
 
         if (id == R.id.save_task) {
             // Todo methode schreiben, mit der die aufgabe erstellt wird und es zurück zur main activity geht. Wenn ein feld nicht ausgefüllt wurde, kommt ein neuer Toast
-            Toast.makeText(CreateTask.this, "Not ready yet", Toast.LENGTH_SHORT).show();
+            long predef_checklist_id = 0;
+            if(name.getTag() != null)
+                predef_checklist_id = (Long) name.getTag();
+            Toast.makeText(CreateTask.this, String.valueOf(predef_checklist_id), Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

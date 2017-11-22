@@ -103,7 +103,7 @@ public class PredefinedChecklistRecyclerViewAdapter extends RecyclerView.Adapter
         @Override
         public void onClick(View view) {
             nameEditText.setText(nameView.getText().toString());
-            nameEditText.setTag(CreateTask.TAG_PREDEFINED_CHECKLIST_ID, id);
+            nameEditText.setTag(id);
             descriptionEditText.setText(descriptionView.getText().toString());
         }
 
