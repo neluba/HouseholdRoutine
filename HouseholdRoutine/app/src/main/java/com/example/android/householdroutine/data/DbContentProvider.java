@@ -141,6 +141,33 @@ public class DbContentProvider extends ContentProvider {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 return rows;
+            case CODE_PREDEFINED_CHECKLIST:
+                String predefinedChecklistTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedChecklistTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedChecklistTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME;
+                }
+                db.beginTransaction();
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(predefinedChecklistTableName, null, value);
+                        if (_id != -1) {
+                            rows++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (rows > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rows;
+
 
             default:
                 return super.bulkInsert(uri, values);
@@ -300,8 +327,7 @@ public class DbContentProvider extends ContentProvider {
                 String fullChecklistQuery = " select " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID + ", " +
                         predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_NAME + ", " +
                         predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION + ", " +
-                        predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAME + ", " +
-                        predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_QUANTITY +
+                        predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES +
                         " from " + predefRemindersTable +
                         " inner join " + predefChecklistTable +
                         " on " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID +
@@ -313,7 +339,6 @@ public class DbContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unkown Uri: " + uri);
         }
-
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -390,6 +415,20 @@ public class DbContentProvider extends ContentProvider {
                 }
                 deletedRows = mDbOpenHelper.getWritableDatabase().delete(
                         predefinedRemindersTableName,
+                        selection,
+                        selectionArgs);
+                break;
+            case CODE_PREDEFINED_CHECKLIST:
+                String predefinedChecklistTableName;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        predefinedChecklistTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        predefinedChecklistTableName = DbContract.PredefinedChecklistEntry.TABLE_NAME;
+                }
+                deletedRows = mDbOpenHelper.getWritableDatabase().delete(
+                        predefinedChecklistTableName,
                         selection,
                         selectionArgs);
                 break;

@@ -65,11 +65,9 @@ public class DbContract {
                 .build();
 
         public static final String TABLE_NAME = "checklist";
-
-        public static final String COLUMN_ITEM_NAME = "item_name";
-        public static final String COLUMN_QUANTITY = "quantity";
+        // item names are saved as an json array
+        public static final String COLUMN_ITEM_NAMES = "item_names";
         public static final String REMINDER_ID = "reminder_id";
-        public static final String COLUMN_COMPLETED = "completed";
 
         /**
          * Returns the content uri for a specific row using the id of a checklist
@@ -114,16 +112,15 @@ public class DbContract {
                 .build();
 
         // Inner joins the predefined reminders table with the predefined checklist table
-        // Returns _id, name, description, item_name and quantity from the database
+        // Returns _id, name, description and item_name from the database
         public static final Uri FULL_PREDEFINED_CHECKLIST_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_FULL_PREDEFINED_CHECKLIST)
                 .build();
 
         public static final String TABLE_NAME = "predefined_checklist";
         public static final String TABLE_NAME_DE = "predefined_checklist_de";
-
-        public static final String COLUMN_ITEM_NAME = "item_name";
-        public static final String COLUMN_QUANTITY = "quantity";
+        // item names are saved as an json array
+        public static final String COLUMN_ITEM_NAMES = "item_names";
         public static final String COLUMN_PREDEFINED_REMINDER_ID = "predefined_reminder_id";
 
         /**

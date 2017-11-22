@@ -13,14 +13,15 @@
     android:paddingRight="16dp"
     android:paddingTop="12dp">
 
+
     <ImageView
         android:id="@+id/predef_checklist_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/icon_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_access_time_black_48px"
-        android:contentDescription="@string/icon_description" />
+        app:srcCompat="@drawable/ic_check_box_black_48dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -30,7 +31,7 @@
         app:layout_constraintGuide_begin="24dp" />
 
     <TextView
-        android:id="@+id/predef_reminder_name"
+        android:id="@+id/predef_checklist_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -44,15 +45,29 @@
         tools:text="@string/title_example" />
 
     <TextView
-        android:id="@+id/predef_reminder_description"
+        android:id="@+id/predef_checklist_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:textColor="@color/secondary_text"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/predef_checklist_icon"
-        app:layout_constraintTop_toBottomOf="@+id/predef_reminder_name"
+        app:layout_constraintTop_toBottomOf="@+id/predef_checklist_name"
         tools:text="@string/description_example" />
+
+    <TextView
+        android:id="@+id/predef_checklist_items"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/primary_text"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/predef_checklist_description"
+        app:layout_constraintTop_toBottomOf="@+id/predef_checklist_description"
+        tools:text="@string/checklist_example" />
 </android.support.constraint.ConstraintLayout>

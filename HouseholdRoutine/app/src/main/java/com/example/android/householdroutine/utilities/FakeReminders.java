@@ -1,5 +1,6 @@
 package com.example.android.householdroutine.utilities;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -15,24 +16,40 @@ import java.util.concurrent.TimeUnit;
 
 public class FakeReminders {
     public static void insertFakeData(Context context) {
+        ContentResolver contentResolver = context.getContentResolver();
         List<ContentValues> fakeDate = new ArrayList<ContentValues>();
         for(int i = 0; i<20; i++) {
             fakeDate.add(createContentValues("Reminder: " + String.valueOf(i), "description"));
         }
         // remove old data
-        context.getContentResolver().delete(DbContract.RemindersEntry.CONTENT_URI, null, null);
+        contentResolver.delete(DbContract.RemindersEntry.CONTENT_URI, null, null);
         // insert new data
-        context.getContentResolver().bulkInsert(DbContract.RemindersEntry.CONTENT_URI,
+        contentResolver.bulkInsert(DbContract.RemindersEntry.CONTENT_URI,
                 fakeDate.toArray(new ContentValues[20]));
 
 
         // predef reminders
         fakeDate.clear();
+        contentResolver.delete(DbContract.PredefinedRemindersEntry.CONTENT_URI, null, null);
         for(int i = 0; i<20; i++) {
             fakeDate.add(createPredefRemindersContentValues("Reminder: " + String.valueOf(i), "description"));
         }
-        context.getContentResolver().delete(DbContract.PredefinedRemindersEntry.CONTENT_URI, null, null);
-        context.getContentResolver().bulkInsert(DbContract.PredefinedRemindersEntry.CONTENT_URI, fakeDate.toArray(new ContentValues[20]));
+        contentResolver.bulkInsert(DbContract.PredefinedRemindersEntry.CONTENT_URI, fakeDate.toArray(new ContentValues[20]));
+
+        // predef checklist
+        List<ContentValues> checklist = new ArrayList<ContentValues>();
+        ArrayList<String> items = new ArrayList<String>();
+        for (int i = 0; i<5; i++) {
+            items.add(String.valueOf(i));
+        }
+        String jsonItem = ConvertJsonArray.listToJsonArray(items);
+        for(int i = 0; i<20; i++) {
+            checklist.add(createPredefChecklistContentValues(jsonItem, i));
+        }
+        contentResolver.bulkInsert(DbContract.PredefinedChecklistEntry.CONTENT_URI, checklist.toArray(new ContentValues[20]));
+
+
+
     }
 
     private static ContentValues createContentValues(String name, String description) {
@@ -59,6 +76,13 @@ public class FakeReminders {
         testData.put(DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION, description);
         int type = (int) (Math.random()*2);
         testData.put(DbContract.PredefinedRemindersEntry.COLUMN_TYPE, type);
+        return testData;
+    }
+
+    private static ContentValues createPredefChecklistContentValues(String items, int id) {
+        ContentValues testData = new ContentValues();
+        testData.put(DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES, items);
+        testData.put(DbContract.PredefinedChecklistEntry.COLUMN_PREDEFINED_REMINDER_ID, String.valueOf(id));
         return testData;
     }
 

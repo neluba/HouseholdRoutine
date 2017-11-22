@@ -66,10 +66,10 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
+                android:onClick="addItem"
                 android:scaleType="fitCenter"
                 android:tint="@color/secondary_text"
-                android:onClick="addItem"
-                app:srcCompat="@drawable/ic_add_black_48dp"/>
+                app:srcCompat="@drawable/ic_add_black_48dp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -85,5 +85,15 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/new_task_predefined_checklist"
+        android:layout_width="0dp"
+        android:layout_height="256dp"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_task_checklist_type" />
 
 </android.support.constraint.ConstraintLayout>

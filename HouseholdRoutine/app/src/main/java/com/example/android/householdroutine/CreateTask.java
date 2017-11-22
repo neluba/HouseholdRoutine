@@ -39,9 +39,15 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     public static final int ID_PREDEFINED_REMINDERS_LOADER = 14;
     public static final int ID_PREDEFINED_CHECKLIST_LOADER = 15;
 
+    // Tag in the EditText View name, that saves a long value for the predefined checklist id
+    public static final int TAG_PREDEFINED_CHECKLIST_ID = 13;
+
     private RecyclerView mPredefinedRemindersRecyclerView;
     private PredefinedRemindersRecyclerViewAdapter mPredefinedRemindersAdapter;
     private int mPredefinedRemindersPosition = RecyclerView.NO_POSITION;
+    private RecyclerView mPredefinedChecklistRecyclerView;
+    private PredefinedChecklistRecyclerViewAdapter mPredefinedChecklistAdapter;
+    private int mPredefinedChecklistPosition = RecyclerView.NO_POSITION;
 
     private EditText name;
     private EditText description;
@@ -65,7 +71,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     private static final String CHECKLIST_PREDEFINED_CHECKED_KEY = "cl_predefined_checked";
     private static final String CHECKLIST_OWN_CHECKED_KEY = "cl_own_checked";
 
-    // Columns that will be used for showing data in the MainActivity
+    // Columns to use for the predefined reminders recycler view
     public static final String[] PREDEFINED_REMINDERS_PROJECTION = {
             DbContract.PredefinedRemindersEntry.COLUMN_NAME,
             DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION};
@@ -74,8 +80,18 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     public static final int PREDEF_REMINDERS_INDEX_NAME = 0;
     public static final int PREDEF_REMINDERS_INDEX_DESCRIPTION = 1;
 
+    public static final String[] PREDEFINED_CHECKLIST_PROJECTION = {
+            DbContract.PredefinedChecklistEntry._ID,
+            DbContract.PredefinedRemindersEntry.COLUMN_NAME,
+            DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION,
+            DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES};
 
-    // TODO predefined reminders und checklists einbauen
+    // Index values for the predefined checklist columns
+    public static final int PREDEF_CHECKLIST_INDEX_ID = 0;
+    public static final int PREDEF_CHECKLIST_INDEX_NAME = 1;
+    public static final int PREDEF_CHECKLIST_INDEX_DESCRIPTION = 2;
+    public static final int PREDEF_CHECKLIST_INDEX_ITEM_NAME = 3;
+
     // TODO alles am ende in die db schreiben und zurück in die main activity
     // TODO Nach dem man einen eigenen checklisten eintrag hinzugefügt hat, soll die tastatur runter
     @Override
@@ -95,14 +111,23 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         ownChecklistView = (LinearLayout) findViewById(R.id.new_task_checklist_type_own);
         ownChecklistAddItemName = (EditText) findViewById(R.id.own_checklist_add_item_name);
         mPredefinedRemindersRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_reminders);
+        mPredefinedChecklistRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_checklist);
 
         // initialize predefined reminder recycler view
-        LinearLayoutManager layoutManager =
+        LinearLayoutManager layoutManagerReminders =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mPredefinedRemindersRecyclerView.setLayoutManager(layoutManager);
+        mPredefinedRemindersRecyclerView.setLayoutManager(layoutManagerReminders);
         mPredefinedRemindersRecyclerView.setHasFixedSize(true);
         mPredefinedRemindersAdapter = new PredefinedRemindersRecyclerViewAdapter(this, name, description);
         mPredefinedRemindersRecyclerView.setAdapter(mPredefinedRemindersAdapter);
+
+        // initialize predefined checklist recycler view
+        LinearLayoutManager layoutManagerChecklist =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mPredefinedChecklistRecyclerView.setLayoutManager(layoutManagerChecklist);
+        mPredefinedChecklistRecyclerView.setHasFixedSize(true);
+        mPredefinedChecklistAdapter = new PredefinedChecklistRecyclerViewAdapter(this, name, description);
+        mPredefinedChecklistRecyclerView.setAdapter(mPredefinedChecklistAdapter);
 
 
         // Restore layout state after rotation
@@ -304,12 +329,12 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
 
     private void showOwnChecklistView() {
         ownChecklistView.setVisibility(View.VISIBLE);
-        // predefined checklist INVISIBLE
+        mPredefinedChecklistRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     private void hideOwnChecklistView() {
         ownChecklistView.setVisibility(View.INVISIBLE);
-        // predefined checklist VISIBLE
+        mPredefinedChecklistRecyclerView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -375,7 +400,6 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         Uri contentUri;
-
         switch (loaderId) {
             case ID_PREDEFINED_REMINDERS_LOADER:
                 contentUri = DbContract.PredefinedRemindersEntry.CONTENT_URI;
@@ -416,6 +440,13 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
                     mPredefinedRemindersPosition = 0;
                 mPredefinedRemindersRecyclerView.smoothScrollToPosition(mPredefinedRemindersPosition);
                 break;
+            case ID_PREDEFINED_CHECKLIST_LOADER:
+                mPredefinedChecklistAdapter.swapCursor(data);
+                if(mPredefinedChecklistPosition == RecyclerView.NO_POSITION)
+                    mPredefinedChecklistPosition = 0;
+                mPredefinedChecklistRecyclerView.smoothScrollToPosition(mPredefinedChecklistPosition);
+                break;
+
         }
     }
 
@@ -429,6 +460,9 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         switch (loader.getId()) {
             case ID_PREDEFINED_REMINDERS_LOADER:
                 mPredefinedRemindersAdapter.swapCursor(null);
+                break;
+            case ID_PREDEFINED_CHECKLIST_LOADER:
+                mPredefinedChecklistAdapter.swapCursor(null);
                 break;
         }
     }

@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.householdroutine.data.DbContract;
-import com.example.android.householdroutine.utilities.FakeReminders;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // the loader will eventually show the RecyclerView
         hideRecyclerView();
         // TODO DEBUG ONLY - muss noch entfernt werden!!
-        FakeReminders.insertFakeData(this);
+        //FakeReminders.insertFakeData(this);
 
         // fab initialize
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
