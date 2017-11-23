@@ -2,6 +2,7 @@ package com.example.android.householdroutine;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -28,11 +29,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.android.householdroutine.data.DbContract;
+import com.example.android.householdroutine.utilities.ConvertJsonArray;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class CreateTask extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -53,6 +56,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     private RadioButton reminder;
     private RadioButton checklist;
     private ConstraintLayout checklistView;
+    private ConstraintLayout remindersView;
     private RadioButton checklistTypePredefined;
     private RadioButton checklistTypeOwn;
     private LinearLayout ownChecklistView;
@@ -67,6 +71,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     private static final String CHECKLIST_CHECKED_KEY = "checklist_checked";
     private static final String CHECKLIST_PREDEFINED_CHECKED_KEY = "cl_predefined_checked";
     private static final String CHECKLIST_OWN_CHECKED_KEY = "cl_own_checked";
+    private static final String PREDEFINED_CHECKLIST_ID_KEY = "predef_checklist_key";
 
     // Columns to use for the predefined reminders recycler view
     public static final String[] PREDEFINED_REMINDERS_PROJECTION = {
@@ -90,7 +95,6 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     public static final int PREDEF_CHECKLIST_INDEX_ITEM_NAME = 3;
 
     // TODO alles am ende in die db schreiben und zurück in die main activity
-    // TODO Nach dem man einen eigenen checklisten eintrag hinzugefügt hat, soll die tastatur runter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,11 +107,12 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         reminder = (RadioButton) findViewById(R.id.new_task_type_button1);
         checklist = (RadioButton) findViewById(R.id.new_task_type_button2);
         checklistView = (ConstraintLayout) findViewById(R.id.new_task_checklist_view);
+        remindersView = (ConstraintLayout) findViewById(R.id.new_task_reminders_view);
         checklistTypePredefined = (RadioButton) findViewById(R.id.new_task_checklist_type_button1);
         checklistTypeOwn = (RadioButton) findViewById(R.id.new_task_checklist_type_button2);
         ownChecklistView = (LinearLayout) findViewById(R.id.new_task_checklist_type_own);
         ownChecklistAddItemName = (EditText) findViewById(R.id.own_checklist_add_item_name);
-        mPredefinedRemindersRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_reminders);
+        mPredefinedRemindersRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_reminders_recycler_view);
         mPredefinedChecklistRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_checklist);
 
         // initialize predefined reminder recycler view
@@ -237,6 +242,11 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         outState.putBoolean(CHECKLIST_CHECKED_KEY, checklist.isChecked());
         outState.putBoolean(CHECKLIST_PREDEFINED_CHECKED_KEY, checklistTypePredefined.isChecked());
         outState.putBoolean(CHECKLIST_OWN_CHECKED_KEY, checklistTypeOwn.isChecked());
+        // predefined checklist id
+        if (name.getTag() != null) {
+            long id = (Long) name.getTag();
+            outState.putLong(PREDEFINED_CHECKLIST_ID_KEY, id);
+        }
 
     }
 
@@ -275,6 +285,9 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
                 showOwnChecklistView();
             }
         }
+        if (savedInstanceState.containsKey(PREDEFINED_CHECKLIST_ID_KEY)) {
+            name.setTag(savedInstanceState.getLong(PREDEFINED_CHECKLIST_ID_KEY));
+        }
         // restore own checklist
         if (checklistItems != null && checklistItems.size() > 0) {
             LayoutInflater inflater = (LayoutInflater)
@@ -306,32 +319,39 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         int id = item.getItemId();
 
         if (id == R.id.save_task) {
-            // Todo methode schreiben, mit der die aufgabe erstellt wird und es zurück zur main activity geht. Wenn ein feld nicht ausgefüllt wurde, kommt ein neuer Toast
-            long predef_checklist_id = 0;
-            if(name.getTag() != null)
-                predef_checklist_id = (Long) name.getTag();
-            Toast.makeText(CreateTask.this, String.valueOf(predef_checklist_id), Toast.LENGTH_SHORT).show();
+            saveTaskToDatabase();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Shows the checklist view and hides the reminders view
+     */
     private void showChecklistView() {
         checklistView.setVisibility(View.VISIBLE);
-        mPredefinedRemindersRecyclerView.setVisibility(View.INVISIBLE);
+        remindersView.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Shows the reminders view and hides the checklist view
+     */
     private void hideChecklistView() {
         checklistView.setVisibility(View.INVISIBLE);
-        mPredefinedRemindersRecyclerView.setVisibility(View.VISIBLE);
+        remindersView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Shows the own checklist view and hides the predefined checklist view
+     */
     private void showOwnChecklistView() {
         ownChecklistView.setVisibility(View.VISIBLE);
         mPredefinedChecklistRecyclerView.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Shows the predefined checklist view and hides the own checklist view
+     */
     private void hideOwnChecklistView() {
         ownChecklistView.setVisibility(View.INVISIBLE);
         mPredefinedChecklistRecyclerView.setVisibility(View.VISIBLE);
@@ -353,6 +373,92 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         Date date = new Date(calendar.getTimeInMillis());
         DateFormat dateFormat = android.text.format.DateFormat.getTimeFormat(getApplicationContext());
         endTime.setText(dateFormat.format(date));
+    }
+
+    /**
+     * Saves the reminder oder checklist to the database and moves the user back to the main activity
+     * the task could have been saved successfully
+     */
+    private void saveTaskToDatabase() {
+        String nameString = name.getText().toString();
+        if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(CreateTask.this, R.string.new_task_name_missing, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String descriptionString = description.getText().toString();
+        if (TextUtils.isEmpty(endDate.getText().toString())) {
+            Toast.makeText(CreateTask.this, R.string.new_task_date_missing, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(endTime.getText().toString())) {
+            Toast.makeText(CreateTask.this, R.string.new_task_time_missing, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (reminder.isChecked()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DbContract.RemindersEntry.COLUMN_NAME, nameString);
+            contentValues.put(DbContract.RemindersEntry.COLUMN_DESCRIPTION, descriptionString);
+            contentValues.put(DbContract.RemindersEntry.COLUMN_START_DATE, System.currentTimeMillis());
+            contentValues.put(DbContract.RemindersEntry.COLUMN_END_DATE, calendar.getTimeInMillis());
+            contentValues.put(DbContract.RemindersEntry.COLUMN_OUTDATED, DbContract.RemindersEntry.OUTDATED_FALSE);
+            contentValues.put(DbContract.RemindersEntry.COLUMN_TYPE, DbContract.RemindersEntry.TYPE_REMINDER);
+
+            getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);
+        } else if (checklist.isChecked()) {
+            if (checklistTypePredefined.isChecked()) {
+                long predef_checklist_id = 0;
+                if (name.getTag() != null)
+                    predef_checklist_id = (Long) name.getTag();
+
+                final String[] projection = {
+                        DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES
+                };
+                Cursor cursor = getContentResolver().query(
+                        DbContract.PredefinedChecklistEntry.buildUriWithId(predef_checklist_id),
+                        projection,
+                        null,
+                        null,
+                        null,
+                        null);
+                cursor.moveToFirst();
+                String jsonItems = cursor.getString(0);
+                checklistItems = ConvertJsonArray.jsonArrayToList(jsonItems);
+            } else if (checklistTypeOwn.isChecked()) {
+                if (checklistItems.size() <= 0) {
+                    Toast.makeText(CreateTask.this, R.string.new_task_items_missing, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            // Reminder entry
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DbContract.RemindersEntry.COLUMN_NAME, nameString);
+            contentValues.put(DbContract.RemindersEntry.COLUMN_DESCRIPTION, descriptionString);
+            contentValues.put(DbContract.RemindersEntry.COLUMN_START_DATE, System.currentTimeMillis());
+            contentValues.put(DbContract.RemindersEntry.COLUMN_END_DATE, calendar.getTimeInMillis());
+            contentValues.put(DbContract.RemindersEntry.COLUMN_OUTDATED, DbContract.RemindersEntry.OUTDATED_FALSE);
+            contentValues.put(DbContract.RemindersEntry.COLUMN_TYPE, DbContract.RemindersEntry.TYPE_CHECKLIST);
+            Uri uri = getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);
+            Long reminderId = Long.valueOf(uri.getLastPathSegment());
+            // Checklist entry
+            List<ContentValues> itemData = new ArrayList<ContentValues>();
+            for(String item : checklistItems) {
+                ContentValues itemValues = new ContentValues();
+                itemValues.put(DbContract.ChecklistEntry.COLUMN_ITEM_NAME, item);
+                itemValues.put(DbContract.ChecklistEntry.COLUMN_COMPLETED_ID, DbContract.ChecklistEntry.COMPLETED_FALSE);
+                itemValues.put(DbContract.ChecklistEntry.COLUMN_REMINDER_ID, reminderId);
+                itemData.add(itemValues);
+            }
+            getContentResolver().bulkInsert(DbContract.ChecklistEntry.CONTENT_URI,
+                    itemData.toArray(new ContentValues[checklistItems.size()]));
+        } else {
+            Toast.makeText(CreateTask.this, R.string.new_task_type_missing, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(CreateTask.this, R.string.new_task_saved, Toast.LENGTH_LONG).show();
+        finish();
     }
 
     /**
@@ -442,7 +548,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
                 break;
             case ID_PREDEFINED_CHECKLIST_LOADER:
                 mPredefinedChecklistAdapter.swapCursor(data);
-                if(mPredefinedChecklistPosition == RecyclerView.NO_POSITION)
+                if (mPredefinedChecklistPosition == RecyclerView.NO_POSITION)
                     mPredefinedChecklistPosition = 0;
                 mPredefinedChecklistRecyclerView.smoothScrollToPosition(mPredefinedChecklistPosition);
                 break;

@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by olive on 22.11.2017.
@@ -26,8 +25,8 @@ public class ConvertJsonArray {
      * @param json
      * @return
      */
-    public static List<String> jsonArrayToList(String json) {
-        List<String> itemList = new ArrayList<String>();
+    public static ArrayList<String> jsonArrayToList(String json) {
+        ArrayList<String> itemList = new ArrayList<String>();
         try {
             JSONArray jsonItems = new JSONArray(json);
             for (int i = 0; i < jsonItems.length(); i++) {

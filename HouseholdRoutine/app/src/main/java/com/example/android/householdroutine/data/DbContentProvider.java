@@ -331,7 +331,7 @@ public class DbContentProvider extends ContentProvider {
                         " from " + predefRemindersTable +
                         " inner join " + predefChecklistTable +
                         " on " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID +
-                        " = " + predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_PREDEFINED_REMINDER_ID +
+                        " = " + predefChecklistTable + "." + DbContract.PredefinedChecklistEntry._ID +
                         " where type = 1;";
                 cursor = mDbOpenHelper.getReadableDatabase().rawQuery(fullChecklistQuery, null);
                 break;

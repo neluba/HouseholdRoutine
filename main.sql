@@ -9,7 +9,7 @@ Target Server Type    : SQLite
 Target Server Version : 30808
 File Encoding         : 65001
 
-Date: 2017-11-22 03:54:00
+Date: 2017-11-23 13:24:51
 */
 
 PRAGMA foreign_keys = OFF;
@@ -20,8 +20,9 @@ PRAGMA foreign_keys = OFF;
 DROP TABLE IF EXISTS "main"."checklist";
 CREATE TABLE "checklist" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-"item_names"  TEXT NOT NULL,
-"reminder_id"  INTEGER NOT NULL
+"item_name"  TEXT NOT NULL,
+"reminder_id"  INTEGER,
+"completed"  INTEGER
 );
 
 -- ----------------------------
@@ -34,19 +35,18 @@ CREATE TABLE "checklist" (
 DROP TABLE IF EXISTS "main"."predefined_checklist";
 CREATE TABLE "predefined_checklist" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-"item_names"  TEXT,
-"predefined_reminder_id"  INTEGER
+"item_names"  TEXT
 );
 
 -- ----------------------------
 -- Records of predefined_checklist
 -- ----------------------------
-INSERT INTO "main"."predefined_checklist" VALUES (1, 'Schwämme', 1);
-INSERT INTO "main"."predefined_checklist" VALUES (2, 'Mülltüten', 1);
-INSERT INTO "main"."predefined_checklist" VALUES (3, 'Kaffee', 1);
-INSERT INTO "main"."predefined_checklist" VALUES (4, 'Küche', 3);
-INSERT INTO "main"."predefined_checklist" VALUES (5, 'Bad', 3);
-INSERT INTO "main"."predefined_checklist" VALUES (6, 'Schlafzimmer', 3);
+INSERT INTO "main"."predefined_checklist" VALUES (1, 'Schwämme');
+INSERT INTO "main"."predefined_checklist" VALUES (2, 'Mülltüten');
+INSERT INTO "main"."predefined_checklist" VALUES (3, 'Kaffee');
+INSERT INTO "main"."predefined_checklist" VALUES (4, 'Küche');
+INSERT INTO "main"."predefined_checklist" VALUES (5, 'Bad');
+INSERT INTO "main"."predefined_checklist" VALUES (6, 'Schlafzimmer');
 
 -- ----------------------------
 -- Table structure for predefined_checklist_de
@@ -54,8 +54,7 @@ INSERT INTO "main"."predefined_checklist" VALUES (6, 'Schlafzimmer', 3);
 DROP TABLE IF EXISTS "main"."predefined_checklist_de";
 CREATE TABLE "predefined_checklist_de" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-"item_names"  TEXT,
-"predefined_reminder_id"  INTEGER
+"item_names"  TEXT
 );
 
 -- ----------------------------
@@ -105,7 +104,6 @@ CREATE TABLE "reminders" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "name"  TEXT(255) NOT NULL,
 "description"  TEXT(5012),
-"checklist_id"  INTEGER NOT NULL,
 "startDate"  INTEGER NOT NULL,
 "endDate"  INTEGER NOT NULL,
 "outdated"  INTEGER NOT NULL,
@@ -125,9 +123,9 @@ CREATE TABLE sqlite_sequence(name,seq);
 -- ----------------------------
 -- Records of sqlite_sequence
 -- ----------------------------
-INSERT INTO "main"."sqlite_sequence" VALUES ('reminders', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_reminders', 3);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_reminders_de', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_checklist', 6);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_checklist_de', 0);
+INSERT INTO "main"."sqlite_sequence" VALUES ('reminders', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('checklist', 0);

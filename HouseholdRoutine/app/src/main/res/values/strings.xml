@@ -26,6 +26,13 @@
     <string name="new_task_type_label">Type of the task</string>
     <string name="new_task_type_reminder">Reminder</string>
     <string name="new_task_type_checklist">Checklist</string>
+    <string name="new_task_predefined_reminders_label">Predefined reminders</string>
+    <string name="new_task_name_missing">Please enter a name for this task</string>
+    <string name="new_task_date_missing">Please set a date for this task</string>
+    <string name="new_task_time_missing">Please set a time for this task</string>
+    <string name="new_task_type_missing">please select a type for this task</string>
+    <string name="new_task_saved">Task saved</string>
+    <string name="new_task_items_missing">Please add at least one item to the checklist</string>
 
     <string name="new_task_checklist_label">Type of checklist</string>
     <string name="new_task_checklist_type">Predefined checklist</string>

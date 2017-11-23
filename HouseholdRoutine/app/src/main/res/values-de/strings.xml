@@ -19,4 +19,11 @@
     <string name="new_task_checklist_type">Vorgefertigte Checkliste</string>
     <string name="new_task_save">Speichern</string>
     <string name="icon_description">Icon</string>
+    <string name="new_task_predefined_reminders_label">Vorgefertigte Erinnerungen</string>
+    <string name="new_task_name_missing">Ein Name für diese Aufgabe fehlt</string>
+    <string name="new_task_date_missing">Ein Datum für diese Aufgabe fehlt</string>
+    <string name="new_task_time_missing">Eine Zeit für diese Aufgabe fehlt</string>
+    <string name="new_task_type_missing">Bitte wählen Sie den Typ diese Aufgabe aus</string>
+    <string name="new_task_saved">Aufgabe gespeichert</string>
+    <string name="new_task_items_missing">Es muss mindestens ein Element in der Checkliste existieren</string>
 </resources>

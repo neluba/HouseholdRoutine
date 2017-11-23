@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.householdroutine.data.DbContract;
 
@@ -99,6 +100,9 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 | DateUtils.FORMAT_SHOW_TIME;
         String endDateString = DateUtils.formatDateTime(mContext, endDate, flags);
         holder.dateView.setText(endDateString);
+        // id
+        Long id = mCursor.getLong(MainActivity.INDEX_ID);
+        holder.id = id;
 
 
     }
@@ -125,6 +129,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         final TextView dateView;
         final TextView nameView;
         final TextView descriptionView;
+        Long id;
 
         MainAdapterViewHolder(View view) {
             super(view);
@@ -141,6 +146,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         @Override
         public void onClick(View view) {
             // TODO onClick verhalten für die RecyclerView view holder
+            Toast.makeText(mContext, String.valueOf(id), Toast.LENGTH_SHORT).show();
         }
     }
 

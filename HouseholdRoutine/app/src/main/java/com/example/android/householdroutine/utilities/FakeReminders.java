@@ -32,7 +32,7 @@ public class FakeReminders {
         fakeDate.clear();
         contentResolver.delete(DbContract.PredefinedRemindersEntry.CONTENT_URI, null, null);
         for(int i = 0; i<20; i++) {
-            fakeDate.add(createPredefRemindersContentValues("Reminder: " + String.valueOf(i), "description"));
+            fakeDate.add(createPredefRemindersContentValues(i, "description"));
         }
         contentResolver.bulkInsert(DbContract.PredefinedRemindersEntry.CONTENT_URI, fakeDate.toArray(new ContentValues[20]));
 
@@ -63,17 +63,17 @@ public class FakeReminders {
         testData.put(DbContract.RemindersEntry.COLUMN_START_DATE, today);
         fakeEndDate = today + TimeUnit.DAYS.toMillis((int) (Math.random()*10));
         testData.put(DbContract.RemindersEntry.COLUMN_END_DATE, fakeEndDate);
-        testData.put(DbContract.RemindersEntry.COLUMN_CHECKLIST, 0);
         testData.put(DbContract.RemindersEntry.COLUMN_OUTDATED, 0);
         int type = (int) (Math.random()*2);
         testData.put(DbContract.RemindersEntry.COLUMN_TYPE, type);
         return testData;
     }
 
-    private static ContentValues createPredefRemindersContentValues(String name, String description) {
+    private static ContentValues createPredefRemindersContentValues(int id, String description) {
         ContentValues testData = new ContentValues();
-        testData.put(DbContract.PredefinedRemindersEntry.COLUMN_NAME, name);
+        testData.put(DbContract.PredefinedRemindersEntry.COLUMN_NAME, "Reminder: " + String.valueOf(id));
         testData.put(DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION, description);
+        testData.put(DbContract.PredefinedRemindersEntry.COLUMN_CHECKLIST, id);
         int type = (int) (Math.random()*2);
         testData.put(DbContract.PredefinedRemindersEntry.COLUMN_TYPE, type);
         return testData;
@@ -82,7 +82,6 @@ public class FakeReminders {
     private static ContentValues createPredefChecklistContentValues(String items, int id) {
         ContentValues testData = new ContentValues();
         testData.put(DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES, items);
-        testData.put(DbContract.PredefinedChecklistEntry.COLUMN_PREDEFINED_REMINDER_ID, String.valueOf(id));
         return testData;
     }
 

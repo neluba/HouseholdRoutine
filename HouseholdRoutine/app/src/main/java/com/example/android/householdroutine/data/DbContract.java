@@ -31,8 +31,6 @@ public class DbContract {
         // reminder description -- string
         public static final String COLUMN_DESCRIPTION = "description";
         // id of the checklist. -1 if it doesn't have a checklist. It needs to be set, when type is 1
-        // integer
-        public static final String COLUMN_CHECKLIST = "checklist_id";
         // start time in millis -- integer
         public static final String COLUMN_START_DATE = "startDate";
         // end time in millis -- integer
@@ -44,6 +42,8 @@ public class DbContract {
 
         public static final int TYPE_REMINDER = 0;
         public static final int TYPE_CHECKLIST = 1;
+        public static final int OUTDATED_FALSE = 0;
+        public static final int OUTDATED_TRUE = 1;
 
         /**
          * Returns the content uri for a specific row using the id of a reminder
@@ -66,8 +66,12 @@ public class DbContract {
 
         public static final String TABLE_NAME = "checklist";
         // item names are saved as an json array
-        public static final String COLUMN_ITEM_NAMES = "item_names";
-        public static final String REMINDER_ID = "reminder_id";
+        public static final String COLUMN_ITEM_NAME = "item_name";
+        public static final String COLUMN_REMINDER_ID = "reminder_id";
+        public static final String COLUMN_COMPLETED_ID = "completed";
+
+        public static final int COMPLETED_TRUE = 1;
+        public static final int COMPLETED_FALSE = 0;
 
         /**
          * Returns the content uri for a specific row using the id of a checklist
@@ -112,7 +116,7 @@ public class DbContract {
                 .build();
 
         // Inner joins the predefined reminders table with the predefined checklist table
-        // Returns _id, name, description and item_name from the database
+        // Returns _id, name, description and item_names from the database
         public static final Uri FULL_PREDEFINED_CHECKLIST_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_FULL_PREDEFINED_CHECKLIST)
                 .build();
@@ -121,7 +125,6 @@ public class DbContract {
         public static final String TABLE_NAME_DE = "predefined_checklist_de";
         // item names are saved as an json array
         public static final String COLUMN_ITEM_NAMES = "item_names";
-        public static final String COLUMN_PREDEFINED_REMINDER_ID = "predefined_reminder_id";
 
         /**
          * Returns the content uri for a specific row using the id of a checklist
