@@ -24,6 +24,7 @@ public class DbContentProvider extends ContentProvider {
     public static final int CODE_REMINDERS_WITH_ID = 101;
     public static final int CODE_CHECKLIST = 200;
     public static final int CODE_CHECKLIST_WITH_ID = 201;
+    public static final int CODE_CHECKLIST_WITH_REMINDER_ID = 202;
     public static final int CODE_PREDEFINED_REMINDERS = 300;
     public static final int CODE_PREDEFINED_REMINDERS_WITH_ID = 301;
     public static final int CODE_PREDEFINED_CHECKLIST = 400;
@@ -48,6 +49,8 @@ public class DbContentProvider extends ContentProvider {
         matcher.addURI(authority, DbContract.PATH_CHECKLIST, CODE_CHECKLIST);
         // URI : content://CONTENT_AUTHORITY/checklist/ */
         matcher.addURI(authority, DbContract.PATH_CHECKLIST + "/#", CODE_CHECKLIST_WITH_ID);
+        // URI : content://CONTENT_AUTHORITY/single_checklist/ */
+        matcher.addURI(authority, DbContract.PATH_SINGLE_CHECKLIST + "/#", CODE_CHECKLIST_WITH_REMINDER_ID);
         // URI : content://CONTENT_AUTHORITY/predefined_reminders
         matcher.addURI(authority, DbContract.PATH_PREDEFINED_REMINDERS, CODE_PREDEFINED_REMINDERS);
         // URI : content://CONTENT_AUTHORITY/predefined_reminders/ */
@@ -226,6 +229,18 @@ public class DbContentProvider extends ContentProvider {
                         projection,
                         DbContract.ChecklistEntry._ID + "=?",
                         checklist_selectionArg,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case CODE_CHECKLIST_WITH_REMINDER_ID:
+                String single_checklist_id = uri.getLastPathSegment();
+                String[] single_checklist_selectionArg = new String[]{single_checklist_id};
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        DbContract.ChecklistEntry.TABLE_NAME,
+                        projection,
+                        DbContract.ChecklistEntry.COLUMN_REMINDER_ID + "=?",
+                        single_checklist_selectionArg,
                         null,
                         null,
                         sortOrder);

@@ -13,6 +13,7 @@ public class DbContract {
 
     public  static final String PATH_REMINDERS = "reminders";
     public static final String PATH_CHECKLIST = "checklist";
+    public static final String PATH_SINGLE_CHECKLIST = "single_checklist";
     public static final String PATH_PREDEFINED_REMINDERS = "predefined_reminders";
     public static final String PATH_PREDEFINED_CHECKLIST = "predefined_checklist";
     public static final String PATH_FULL_PREDEFINED_CHECKLIST = "full_predefined_checklist";
@@ -75,10 +76,21 @@ public class DbContract {
 
         /**
          * Returns the content uri for a specific row using the id of a checklist
-         * @param id reminder id
+         * @param id checklist id
          */
         public static Uri buildChecklistUriWithId(long id) {
             return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+
+        /**
+         * Returns the content uri for a single checklist using the reminder id
+         * @param id reminder id
+         */
+        public static Uri buildChecklistUriWithReminderId(long id) {
+            return BASE_CONTENT_URI.buildUpon()
+                    .appendPath(PATH_SINGLE_CHECKLIST)
                     .appendPath(Long.toString(id))
                     .build();
         }
@@ -128,7 +140,7 @@ public class DbContract {
 
         /**
          * Returns the content uri for a specific row using the id of a checklist
-         * @param id reminder id
+         * @param id checklist id
          */
         public static Uri buildUriWithId(long id) {
             return CONTENT_URI.buildUpon()

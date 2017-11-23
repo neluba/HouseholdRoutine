@@ -27,7 +27,10 @@
 
         <activity
             android:name=".CreateTask"
-            android:label="@string/new_task_title"/>
+            android:label="@string/new_task_title" />
+        <activity
+            android:name=".TaskDetails"
+            android:label="@string/task_details_label"/>
     </application>
 
 </manifest>

@@ -40,5 +40,8 @@
     <string name="new_task_checklist_own_add_item">Add item</string>
     <string name="new_task_checklist_own_item_debug" translatable="false">Item</string>
 
+    <!-- Task details -->
+    <string name="task_details_label">Details</string>
+
 
 </resources>

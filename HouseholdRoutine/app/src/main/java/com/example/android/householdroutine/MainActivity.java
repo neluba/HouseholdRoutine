@@ -20,8 +20,10 @@ import android.view.View;
 import com.example.android.householdroutine.data.DbContract;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    // TODO outdated reminders sollen ganz oben angezeigt werden und müssen besonders gekennzeichnet werden
 
     public static final int ID_MAINACTIVITY_LOADER = 13;
+    public static final String EXTRA_REMINDER_ID = "reminder_id";
 
     // Recyclerview variables
     private RecyclerView mRecyclerView;

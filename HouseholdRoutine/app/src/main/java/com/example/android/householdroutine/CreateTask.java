@@ -94,7 +94,6 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     public static final int PREDEF_CHECKLIST_INDEX_DESCRIPTION = 2;
     public static final int PREDEF_CHECKLIST_INDEX_ITEM_NAME = 3;
 
-    // TODO alles am ende in die db schreiben und zurück in die main activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
