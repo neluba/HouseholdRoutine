@@ -7,6 +7,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
+import android.widget.TextView;
 
 import com.example.android.householdroutine.data.DbContract;
 
@@ -14,6 +17,12 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
 
     public static final int ID_TASK_DETAILS_LOADER = 13;
     public static final int ID_TASK_DETAILS_CHECKLIST_LOADER = 14;
+
+    private TextView mName;
+    private TextView mDescription;
+    private TextView mStartDate;
+    private TextView mEndDate;
+    private RecyclerView mRecyclerView;
 
     private long reminderId = -1;
 
@@ -67,6 +76,23 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
      * @param cursor
      */
     private void buildUi(Cursor cursor) {
+        mName = (TextView) findViewById(R.id.details_name);
+        mDescription = (TextView) findViewById(R.id.details_description);
+        mStartDate = (TextView) findViewById(R.id.details_start_date);
+        mEndDate = (TextView) findViewById(R.id.details_end_date);
+
+        mName.setText(cursor.getString(INDEX_NAME));
+        mDescription.setText(cursor.getString(INDEX_DESCRIPTION));
+        long startDate = cursor.getLong(INDEX_START_DATE);
+        int flags = DateUtils.FORMAT_SHOW_DATE
+                | DateUtils.FORMAT_NUMERIC_DATE
+                | DateUtils.FORMAT_SHOW_YEAR
+                | DateUtils.FORMAT_SHOW_TIME;
+        String startDateString = DateUtils.formatDateTime(this, startDate, flags);
+        mStartDate.setText(startDateString);
+        long endDate = cursor.getLong(INDEX_END_DATE);
+        String endDateString = DateUtils.formatDateTime(this, endDate, flags);
+        mEndDate.setText(endDateString);
 
     }
 

@@ -26,4 +26,7 @@
     <string name="new_task_type_missing">Bitte wählen Sie den Typ diese Aufgabe aus</string>
     <string name="new_task_saved">Aufgabe gespeichert</string>
     <string name="new_task_items_missing">Es muss mindestens ein Element in der Checkliste existieren</string>
+    <string name="task_details_label">Einzelheiten</string>
+    <string name="task_details_start_date_label">Gestartet am:</string>
+    <string name="task_details_end_date_label">Endet am:</string>
 </resources>

@@ -2,8 +2,113 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/details_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.householdroutine.TaskDetails">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/details_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="192dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/details_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/details_guideline"
+        app:layout_constraintStart_toStartOf="@+id/details_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/title_example" />
+
+    <TextView
+        android:id="@+id/details_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/details_guideline"
+        app:layout_constraintStart_toStartOf="@+id/details_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/details_name"
+        tools:text="@string/description_example" />
+
+    <TextView
+        android:id="@+id/details_start_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/task_details_start_date_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/details_start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintStart_toStartOf="@+id/details_start_date_label"
+        app:layout_constraintTop_toBottomOf="@+id/details_start_date_label"
+        tools:text="@string/date_example" />
+
+    <TextView
+        android:id="@+id/details_end_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/task_details_end_date_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/details_guideline"
+        app:layout_constraintTop_toTopOf="@+id/details_start_date_label" />
+
+    <TextView
+        android:id="@+id/details_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintStart_toStartOf="@+id/details_end_date_label"
+        app:layout_constraintTop_toBottomOf="@+id/details_end_date_label"
+        tools:text="@string/date_example" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="246dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/details_start_date"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </android.support.constraint.ConstraintLayout>

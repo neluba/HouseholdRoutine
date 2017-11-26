@@ -42,6 +42,7 @@
 
     <!-- Task details -->
     <string name="task_details_label">Details</string>
-
+    <string name="task_details_start_date_label">Started at:</string>
+    <string name="task_details_end_date_label">Ends at:</string>
 
 </resources>
