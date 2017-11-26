@@ -7,8 +7,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.householdroutine.data.DbContract;
@@ -22,7 +24,9 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     private TextView mDescription;
     private TextView mStartDate;
     private TextView mEndDate;
+    private TextView mChecklistLabel;
     private RecyclerView mRecyclerView;
+    private DetailsRecyclerViewAdapter mAdapter;
 
     private long reminderId = -1;
 
@@ -98,11 +102,29 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
 
     /**
      * Initializes the checklist ui with the cursor data
+     *
      * @param cursor
      */
     private void buildChecklistUi(Cursor cursor) {
 
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.details_recycler_view);
+        mChecklistLabel = (TextView) findViewById(R.id.details_checklist_label);
+
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mAdapter = new DetailsRecyclerViewAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.swapCursor(cursor);
+
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mChecklistLabel.setVisibility(View.VISIBLE);
     }
+
+    // TODO menü mit löschen, als erledigt markieren und vielleicht bearbeiten 
 
     /**
      * Gets automatically started by a background thread to load all reminders, that are not outdated, from the database

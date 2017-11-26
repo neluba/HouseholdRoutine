@@ -29,4 +29,5 @@
     <string name="task_details_label">Einzelheiten</string>
     <string name="task_details_start_date_label">Gestartet am:</string>
     <string name="task_details_end_date_label">Endet am:</string>
+    <string name="task_details_checklist_label">Checklist Einträge:</string>
 </resources>
