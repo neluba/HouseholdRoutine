@@ -1,5 +1,6 @@
 package com.example.android.householdroutine;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import com.example.android.householdroutine.data.DbContract;
 
 /**
  * Created by olive on 26.11.2017.
@@ -37,6 +40,9 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
     public void onBindViewHolder(DetailsAdapterViewHolder holder, int position) {
         mCursor.moveToPosition(position);
 
+        // id
+        long id = mCursor.getLong(TaskDetails.CHECKLIST_INDEX_ID);
+        holder.id = id;
         // item name
         String name= mCursor.getString(TaskDetails.CHECKLIST_INDEX_ITEM_NAME);
         holder.nameView.setText(name);
@@ -66,6 +72,7 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
     }
 
     class DetailsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        long id;
         final TextView nameView;
         final CheckBox checkBoxView;
         boolean checked;
@@ -82,11 +89,23 @@ public class DetailsRecyclerViewAdapter extends RecyclerView.Adapter<DetailsRecy
 
         @Override
         public void onClick(View view) {
-            if (checked)
+            int completed = 0;
+            if (checked) {
+                completed = 0;
                 checked = false;
-            else
+            } else {
+                completed = 1;
                 checked = true;
+            }
             checkBoxView.setChecked(checked);
+            // update the checklist entry in the database
+            ContentValues values = new ContentValues();
+            values.put(DbContract.ChecklistEntry.COLUMN_COMPLETED, completed);
+            mContext.getContentResolver().update(
+                    DbContract.ChecklistEntry.buildChecklistUriWithId(id),
+                    values,
+                    null,
+                    null);
 
         }
 

@@ -51,7 +51,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     public static final String[] CHECKLIST_PROJECTION = {
             DbContract.ChecklistEntry._ID,
             DbContract.ChecklistEntry.COLUMN_ITEM_NAME,
-            DbContract.ChecklistEntry.COLUMN_COMPLETED_ID
+            DbContract.ChecklistEntry.COLUMN_COMPLETED
     };
 
     // Index values for the checklist items
@@ -124,7 +124,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         mChecklistLabel.setVisibility(View.VISIBLE);
     }
 
-    // TODO menü mit löschen, als erledigt markieren und vielleicht bearbeiten 
+    // TODO menü mit löschen, als erledigt markieren und vielleicht bearbeiten
 
     /**
      * Gets automatically started by a background thread to load all reminders, that are not outdated, from the database

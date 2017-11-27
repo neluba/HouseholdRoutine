@@ -458,7 +458,22 @@ public class DbContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues,
                       @Nullable String selection, @Nullable String[] selectionArgs) {
-        // TODO update Methode schreiben
-        return 0;
+        int match = sUriMatcher.match(uri);
+        int updatedRows = 0;
+
+        switch (match) {
+            case CODE_CHECKLIST_WITH_ID:
+                String checklist_id = uri.getLastPathSegment();
+                String[] idSelectionArg = new String[]{checklist_id};
+
+                updatedRows = mDbOpenHelper.getWritableDatabase().update(
+                        DbContract.ChecklistEntry.TABLE_NAME,
+                        contentValues,
+                        DbContract.ChecklistEntry._ID + "=?",
+                        idSelectionArg
+                );
+        }
+
+        return updatedRows;
     }
 }

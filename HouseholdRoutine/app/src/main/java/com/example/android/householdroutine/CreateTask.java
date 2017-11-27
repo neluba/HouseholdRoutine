@@ -445,7 +445,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             for(String item : checklistItems) {
                 ContentValues itemValues = new ContentValues();
                 itemValues.put(DbContract.ChecklistEntry.COLUMN_ITEM_NAME, item);
-                itemValues.put(DbContract.ChecklistEntry.COLUMN_COMPLETED_ID, DbContract.ChecklistEntry.COMPLETED_FALSE);
+                itemValues.put(DbContract.ChecklistEntry.COLUMN_COMPLETED, DbContract.ChecklistEntry.COMPLETED_FALSE);
                 itemValues.put(DbContract.ChecklistEntry.COLUMN_REMINDER_ID, reminderId);
                 itemData.add(itemValues);
             }

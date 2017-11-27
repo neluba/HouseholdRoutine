@@ -69,7 +69,7 @@ public class DbContract {
         // item names are saved as an json array
         public static final String COLUMN_ITEM_NAME = "item_name";
         public static final String COLUMN_REMINDER_ID = "reminder_id";
-        public static final String COLUMN_COMPLETED_ID = "completed";
+        public static final String COLUMN_COMPLETED = "completed";
 
         public static final int COMPLETED_TRUE = 1;
         public static final int COMPLETED_FALSE = 0;
