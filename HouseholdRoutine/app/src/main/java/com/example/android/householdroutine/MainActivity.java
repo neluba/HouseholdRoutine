@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // initialize the cursorLoader
         getSupportLoaderManager().initLoader(ID_MAINACTIVITY_LOADER, null, this);
-
     }
 
     /**

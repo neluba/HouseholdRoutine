@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.example.android.householdroutine.Notification.StartReminder;
 import com.example.android.householdroutine.data.DbContract;
 import com.example.android.householdroutine.utilities.UserPoints;
 
@@ -192,7 +193,11 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                             null);
                 }
 
+                // reward points
                 UserPoints.awardReminderCompletePoints(getApplicationContext());
+                // cancel the reminder if it is still open
+                StartReminder.cancelReminder(reminderId, getApplicationContext());
+
                 popupWindow.dismiss();
                 finish();
             };

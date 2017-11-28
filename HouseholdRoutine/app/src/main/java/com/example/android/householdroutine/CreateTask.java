@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.android.householdroutine.Notification.StartReminder;
 import com.example.android.householdroutine.data.DbContract;
 import com.example.android.householdroutine.utilities.ConvertJsonArray;
 
@@ -318,7 +319,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         int id = item.getItemId();
 
         if (id == R.id.save_task) {
-            saveTaskToDatabase();
+            createAndSaveTask();
         }
 
         return super.onOptionsItemSelected(item);
@@ -378,7 +379,10 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
      * Saves the reminder oder checklist to the database and moves the user back to the main activity
      * the task could have been saved successfully
      */
-    private void saveTaskToDatabase() {
+    private void createAndSaveTask() {
+        long reminderId = 0;
+
+        // Check for empty values
         String nameString = name.getText().toString();
         if (TextUtils.isEmpty(nameString)) {
             Toast.makeText(CreateTask.this, R.string.new_task_name_missing, Toast.LENGTH_SHORT).show();
@@ -395,6 +399,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         }
 
 
+        // Create the content values
         if (reminder.isChecked()) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(DbContract.RemindersEntry.COLUMN_NAME, nameString);
@@ -404,7 +409,8 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             contentValues.put(DbContract.RemindersEntry.COLUMN_OUTDATED, DbContract.RemindersEntry.OUTDATED_FALSE);
             contentValues.put(DbContract.RemindersEntry.COLUMN_TYPE, DbContract.RemindersEntry.TYPE_REMINDER);
 
-            getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);
+            Uri uri = getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);
+            reminderId = Long.valueOf(uri.getLastPathSegment());
         } else if (checklist.isChecked()) {
             if (checklistTypePredefined.isChecked()) {
                 long predef_checklist_id = 0;
@@ -423,6 +429,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
                         null);
                 cursor.moveToFirst();
                 String jsonItems = cursor.getString(0);
+                cursor.close();
                 checklistItems = ConvertJsonArray.jsonArrayToList(jsonItems);
             } else if (checklistTypeOwn.isChecked()) {
                 if (checklistItems.size() <= 0) {
@@ -430,7 +437,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
                     return;
                 }
             }
-            // Reminder entry
+            // Reminder entry and find out the reminder id
             ContentValues contentValues = new ContentValues();
             contentValues.put(DbContract.RemindersEntry.COLUMN_NAME, nameString);
             contentValues.put(DbContract.RemindersEntry.COLUMN_DESCRIPTION, descriptionString);
@@ -438,8 +445,10 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             contentValues.put(DbContract.RemindersEntry.COLUMN_END_DATE, calendar.getTimeInMillis());
             contentValues.put(DbContract.RemindersEntry.COLUMN_OUTDATED, DbContract.RemindersEntry.OUTDATED_FALSE);
             contentValues.put(DbContract.RemindersEntry.COLUMN_TYPE, DbContract.RemindersEntry.TYPE_CHECKLIST);
+
             Uri uri = getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);
-            Long reminderId = Long.valueOf(uri.getLastPathSegment());
+            reminderId = Long.valueOf(uri.getLastPathSegment());
+
             // Checklist entry
             List<ContentValues> itemData = new ArrayList<ContentValues>();
             for(String item : checklistItems) {
@@ -456,6 +465,10 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             return;
         }
 
+        // set the reminder alarm
+        StartReminder.startReminder(reminderId, calendar.getTimeInMillis(), this);
+
+        // finish up
         Toast.makeText(CreateTask.this, R.string.new_task_saved, Toast.LENGTH_LONG).show();
         finish();
     }
