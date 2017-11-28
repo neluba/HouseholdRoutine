@@ -34,4 +34,5 @@
     <string name="task_details_complete_text">Wenn Sie diese Erinnerung als erledigt markieren, wird diese gelöscht. Wollen sie fortsetzen?</string>
     <string name="task_details_complete_yes">Ja</string>
     <string name="task_details_complete_no">Nein</string>
+    <string name="outdated">Veraltet</string>
 </resources>
