@@ -6,4 +6,9 @@
         android:orderInCategory="1"
         android:title="@string/task_details_complete"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/delete_task"
+        android:orderInCategory="2"
+        android:title="@string/task_details_delete"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -31,8 +31,10 @@
     <string name="task_details_end_date_label">Endet am:</string>
     <string name="task_details_checklist_label">Checklist Einträge:</string>
     <string name="task_details_complete">Erledigt</string>
-    <string name="task_details_complete_text">Wenn Sie diese Erinnerung als erledigt markieren, wird diese gelöscht. Wollen sie fortsetzen?</string>
+    <string name="task_details_complete_text">Wenn Sie diese Erinnerung als erledigt markieren, wird diese entfernt und es werden Ihnen dafür Punkte gutgeschrieben. Wollen sie fortsetzen?</string>
     <string name="task_details_complete_yes">Ja</string>
     <string name="task_details_complete_no">Nein</string>
     <string name="outdated">Veraltet</string>
+    <string name="task_details_delete">Löschen</string>
+    <string name="task_details_complete_delete_text">Wollen sie diese Erinnerung wirklich löschen?</string>
 </resources>

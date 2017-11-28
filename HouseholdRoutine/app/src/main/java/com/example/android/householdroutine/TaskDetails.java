@@ -152,7 +152,10 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         int id = item.getItemId();
 
         if (id == R.id.complete_task) {
-            showCompletePopup();
+            showCompletePopup(false);
+        }
+        if(id == R.id.delete_task) {
+            showCompletePopup(true);
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,8 +164,9 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     /**
      * Displays the complete reminder popup, which asks the user if he wants to complete and delete
      * this reminder
+     * @param justDelete If true, this popup doesn't complete the reminder and will only delete it without awarding points.
      */
-    private void showCompletePopup() {
+    private void showCompletePopup(final boolean justDelete) {
         NestedScrollView mainLayout = (NestedScrollView) findViewById(R.id.activity_task_details);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -172,10 +176,15 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         boolean focusable = true;
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
-        popupWindow.showAtLocation(mainLayout, Gravity.BOTTOM, 0,0);
+        popupWindow.showAtLocation(mainLayout, Gravity.BOTTOM, 0, 0);
 
         Button yesButton = (Button) popupView.findViewById(R.id.complete_yes_button);
         Button noButton = (Button) popupView.findViewById(R.id.complete_no_button);
+        TextView textView = (TextView) popupView.findViewById(R.id.complete_text);
+
+        if(justDelete) {
+            textView.setText(getApplication().getString(R.string.task_details_complete_delete_text));
+        }
 
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +195,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                         DbContract.RemindersEntry.buildRemindersUriWithId(reminderId),
                         null,
                         null);
-                if(reminderType == DbContract.RemindersEntry.TYPE_CHECKLIST) {
+                if (reminderType == DbContract.RemindersEntry.TYPE_CHECKLIST) {
                     getContentResolver().delete(
                             DbContract.ChecklistEntry.buildChecklistUriWithReminderId(reminderId),
                             null,
@@ -194,13 +203,16 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                 }
 
                 // reward points
-                UserPoints.awardReminderCompletePoints(getApplicationContext());
+                if(!justDelete)
+                    UserPoints.awardReminderCompletePoints(getApplicationContext());
                 // cancel the reminder if it is still open
                 StartReminder.cancelReminder(reminderId, getApplicationContext());
 
                 popupWindow.dismiss();
                 finish();
-            };
+            }
+
+            ;
         });
 
         noButton.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +269,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case ID_TASK_DETAILS_LOADER:
-                if(data.getCount() > 0) {
+                if (data.getCount() > 0) {
                     data.moveToFirst();
                     if (data.getInt(INDEX_TYPE) == 1) {
                         getSupportLoaderManager().initLoader(ID_TASK_DETAILS_CHECKLIST_LOADER, null, this);
