@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = new MainRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        // the loader will eventually show the RecyclerView
-        hideRecyclerView();
         // TODO DEBUG ONLY - muss noch entfernt werden!!
         //FakeReminders.insertFakeData(this);
 
@@ -159,12 +157,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
-        if (mPosition == RecyclerView.NO_POSITION)
-            mPosition = 0;
-        mRecyclerView.smoothScrollToPosition(mPosition);
-        if (data.getCount() != 0)
+        if (data.getCount() != 0) {
+            mAdapter.swapCursor(data);
+            if (mPosition == RecyclerView.NO_POSITION)
+                mPosition = 0;
+            mRecyclerView.smoothScrollToPosition(mPosition);
             showRecyclerView();
+        } else
+            hideRecyclerView();
 
     }
 

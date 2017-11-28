@@ -5,8 +5,8 @@
     <string name="end_date">Endet am:</string>
     <string name="reminders_completed_description">Erstelle neue Erinnerungen um deine Aufgaben zu regeln</string>
     <string name="reminders_completed_label">Keine Erinnerungen gesetzt</string>
-    <string name="new_task_title">Erstelle eine neue Aufgabe</string>
-    <string name="new_task_type_label">Art der Aufgabe</string>
+    <string name="new_task_title">Erinnerung erstellen</string>
+    <string name="new_task_type_label">Art der Erinnerung</string>
     <string name="new_task_description_hint">Beschreibung</string>
     <string name="new_task_end_date_hint">Datum</string>
     <string name="new_task_name_hint">Name</string>
