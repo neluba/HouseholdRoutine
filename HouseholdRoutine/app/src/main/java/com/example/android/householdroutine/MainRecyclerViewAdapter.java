@@ -98,6 +98,9 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             holder.dateView.setVisibility(View.INVISIBLE);
             holder.endDateLabelTextView.setText(mContext.getString(R.string.outdated));
         } else {
+            holder.dateView.setVisibility(View.VISIBLE);
+            holder.endDateLabelTextView.setText(mContext.getString(R.string.end_date));
+
             int flags = DateUtils.FORMAT_SHOW_DATE
                     | DateUtils.FORMAT_NUMERIC_DATE
                     | DateUtils.FORMAT_SHOW_YEAR
