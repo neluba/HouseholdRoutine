@@ -70,7 +70,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             builder.setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(getNotificationIcon())
                     .setContentTitle(name)
                     .setContentText(description)
                     .setContentIntent(resultPendingIntent)
@@ -90,6 +90,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             // cancel the alarm
             StartReminder.cancelReminder(reminderId, context);
+        }
+    }
+
+    private int getNotificationIcon() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return R.drawable.ic_notification_icon;
+        } else {
+            return R.mipmap.ic_launcher_round;
         }
     }
 }

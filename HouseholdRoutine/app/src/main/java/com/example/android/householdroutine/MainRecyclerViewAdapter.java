@@ -94,12 +94,17 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         holder.descriptionView.setText(description);
         // end date
         long endDate = mCursor.getLong(MainActivity.INDEX_END_DATE);
-        int flags = DateUtils.FORMAT_SHOW_DATE
-                | DateUtils.FORMAT_NUMERIC_DATE
-                | DateUtils.FORMAT_SHOW_YEAR
-                | DateUtils.FORMAT_SHOW_TIME;
-        String endDateString = DateUtils.formatDateTime(mContext, endDate, flags);
-        holder.dateView.setText(endDateString);
+        if(endDate <= System.currentTimeMillis()) {
+            holder.dateView.setVisibility(View.INVISIBLE);
+            holder.endDateLabelTextView.setText(mContext.getString(R.string.outdated));
+        } else {
+            int flags = DateUtils.FORMAT_SHOW_DATE
+                    | DateUtils.FORMAT_NUMERIC_DATE
+                    | DateUtils.FORMAT_SHOW_YEAR
+                    | DateUtils.FORMAT_SHOW_TIME;
+            String endDateString = DateUtils.formatDateTime(mContext, endDate, flags);
+            holder.dateView.setText(endDateString);
+        }
         // id
         Long id = mCursor.getLong(MainActivity.INDEX_ID);
         holder.id = id;
@@ -129,6 +134,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         final TextView dateView;
         final TextView nameView;
         final TextView descriptionView;
+        final TextView endDateLabelTextView;
         Long id;
 
         MainAdapterViewHolder(View view) {
@@ -138,6 +144,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             dateView = (TextView) view.findViewById(R.id.list_Item_end_date);
             nameView = (TextView) view.findViewById(R.id.list_item_name);
             descriptionView = (TextView) view.findViewById(R.id.list_item_description);
+            endDateLabelTextView = (TextView) view.findViewById(R.id.list_item_end_date_label);
 
             view.setOnClickListener(this);
         }
