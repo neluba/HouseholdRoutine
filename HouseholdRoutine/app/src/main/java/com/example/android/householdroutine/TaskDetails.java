@@ -6,14 +6,24 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.android.householdroutine.data.DbContract;
+import com.example.android.householdroutine.utilities.UserPoints;
 
 public class TaskDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -29,6 +39,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     private DetailsRecyclerViewAdapter mAdapter;
 
     private long reminderId = -1;
+    private int reminderType = DbContract.RemindersEntry.TYPE_REMINDER;
 
     // Reminder projection
     public static final String[] DETAILS_PROJECTION = {
@@ -106,8 +117,10 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
      * @param cursor
      */
     private void buildChecklistUi(Cursor cursor) {
+        // set new reminder type
+        reminderType = DbContract.RemindersEntry.TYPE_CHECKLIST;
 
-
+        // build the checklist ui
         mRecyclerView = (RecyclerView) findViewById(R.id.details_recycler_view);
         mChecklistLabel = (TextView) findViewById(R.id.details_checklist_label);
 
@@ -120,11 +133,79 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.swapCursor(cursor);
 
+        // set the visibility to visible
         mRecyclerView.setVisibility(View.VISIBLE);
         mChecklistLabel.setVisibility(View.VISIBLE);
     }
 
-    // TODO menü mit löschen, als erledigt markieren und vielleicht bearbeiten
+    // create menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.task_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.complete_task) {
+            showCompletePopup();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Displays the complete reminder popup, which asks the user if he wants to complete and delete
+     * this reminder
+     */
+    private void showCompletePopup() {
+        NestedScrollView mainLayout = (NestedScrollView) findViewById(R.id.activity_task_details);
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.details_complete_popup, null);
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        popupWindow.showAtLocation(mainLayout, Gravity.BOTTOM, 0,0);
+
+        Button yesButton = (Button) popupView.findViewById(R.id.complete_yes_button);
+        Button noButton = (Button) popupView.findViewById(R.id.complete_no_button);
+
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // delete the reminder and award the user with points
+                // TODO maybe add something to prevent cheating in adding points
+                getContentResolver().delete(
+                        DbContract.RemindersEntry.buildRemindersUriWithId(reminderId),
+                        null,
+                        null);
+                if(reminderType == DbContract.RemindersEntry.TYPE_CHECKLIST) {
+                    getContentResolver().delete(
+                            DbContract.ChecklistEntry.buildChecklistUriWithReminderId(reminderId),
+                            null,
+                            null);
+                }
+
+                UserPoints.awardReminderCompletePoints(getApplicationContext());
+                popupWindow.dismiss();
+                finish();
+            };
+        });
+
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+    }
 
     /**
      * Gets automatically started by a background thread to load all reminders, that are not outdated, from the database
@@ -171,11 +252,13 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case ID_TASK_DETAILS_LOADER:
-                data.moveToFirst();
-                if (data.getInt(INDEX_TYPE) == 1) {
-                    getSupportLoaderManager().initLoader(ID_TASK_DETAILS_CHECKLIST_LOADER, null, this);
+                if(data.getCount() > 0) {
+                    data.moveToFirst();
+                    if (data.getInt(INDEX_TYPE) == 1) {
+                        getSupportLoaderManager().initLoader(ID_TASK_DETAILS_CHECKLIST_LOADER, null, this);
+                    }
+                    buildUi(data);
                 }
-                buildUi(data);
                 break;
             case ID_TASK_DETAILS_CHECKLIST_LOADER:
                 data.moveToFirst();

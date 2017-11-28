@@ -46,5 +46,9 @@
     <string name="task_details_end_date_label">Ends at:</string>
     <string name="task_details_checklist_item_example" translatable="false">Item name</string>
     <string name="task_details_checklist_label">Checklist items:</string>
+    <string name="task_details_complete">Complete</string>
+    <string name="task_details_complete_text">Completing this reminder will delete it. Do you want to proceed?</string>
+    <string name="task_details_complete_yes">Yes</string>
+    <string name="task_details_complete_no">No</string>
 
 </resources>

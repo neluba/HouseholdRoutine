@@ -413,12 +413,32 @@ public class DbContentProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+
+            case CODE_REMINDERS_WITH_ID:
+                String reminderId = uri.getLastPathSegment();
+                String[] reminderSelectionArg = new String[]{reminderId};
+                deletedRows = mDbOpenHelper.getWritableDatabase().delete(
+                        DbContract.RemindersEntry.TABLE_NAME,
+                        DbContract.RemindersEntry._ID + "=? ",
+                        reminderSelectionArg);
+                break;
+
             case CODE_CHECKLIST:
                 deletedRows = mDbOpenHelper.getWritableDatabase().delete(
                         DbContract.ChecklistEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
+
+            case CODE_CHECKLIST_WITH_REMINDER_ID:
+                String checklistReminderId = uri.getLastPathSegment();
+                String[] checklistReminderIdSelectionArg = new String[]{checklistReminderId};
+                deletedRows = mDbOpenHelper.getWritableDatabase().delete(
+                        DbContract.ChecklistEntry.TABLE_NAME,
+                        DbContract.ChecklistEntry._ID + "=?",
+                        checklistReminderIdSelectionArg);
+                break;
+
             case CODE_PREDEFINED_REMINDERS:
                 String predefinedRemindersTableName;
                 switch (Locale.getDefault().getLanguage()) {
@@ -433,6 +453,7 @@ public class DbContentProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+
             case CODE_PREDEFINED_CHECKLIST:
                 String predefinedChecklistTableName;
                 switch (Locale.getDefault().getLanguage()) {
@@ -447,6 +468,7 @@ public class DbContentProvider extends ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+
             default:
                 throw new IllegalArgumentException("Unkown uri: " + uri);
         }
