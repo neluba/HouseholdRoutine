@@ -127,7 +127,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         LinearLayoutManager layoutManagerChecklist =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mPredefinedChecklistRecyclerView.setLayoutManager(layoutManagerChecklist);
-        mPredefinedChecklistRecyclerView.setHasFixedSize(true);
+        mPredefinedChecklistRecyclerView.setHasFixedSize(false);
         mPredefinedChecklistAdapter = new PredefinedChecklistRecyclerViewAdapter(this, name, description);
         mPredefinedChecklistRecyclerView.setAdapter(mPredefinedChecklistAdapter);
 
