@@ -37,4 +37,8 @@
     <string name="outdated">Veraltet</string>
     <string name="task_details_delete">Löschen</string>
     <string name="task_details_complete_delete_text">Wollen sie diese Erinnerung wirklich löschen?</string>
+    <string name="action_extras">Belohnungen</string>
+    <string name="extras_title">Belohnungen</string>
+    <string name="extras_points">Punkte:</string>
+    <string name="extras_reminders">Beendete Erinnerungen:</string>
 </resources>

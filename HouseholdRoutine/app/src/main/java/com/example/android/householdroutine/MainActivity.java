@@ -22,7 +22,7 @@ import com.example.android.householdroutine.data.DbContract;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     // TODO outdated reminders sollen ganz oben angezeigt werden und müssen besonders gekennzeichnet werden
 
-    public static final int ID_MAINACTIVITY_LOADER = 13;
+    public static final int ID_MAIN_ACTIVITY_LOADER = 13;
     public static final String EXTRA_REMINDER_ID = "reminder_id";
 
     // Recyclerview variables
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         // initialize the cursorLoader
-        getSupportLoaderManager().initLoader(ID_MAINACTIVITY_LOADER, null, this);
+        getSupportLoaderManager().initLoader(ID_MAIN_ACTIVITY_LOADER, null, this);
     }
 
     /**
@@ -115,15 +115,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            // TODO menü fertig stellen
+        if (id == R.id.action_extras) {
+            Intent intent = new Intent(MainActivity.this, Extras.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * Gets automatically started by a background thread to load all reminders, that are not outdated, from the database
+     * Gets automatically started by a background thread to load all reminders from the database
      *
      * @param loaderId
      * @param bundle
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
 
         switch (loaderId) {
-            case ID_MAINACTIVITY_LOADER:
+            case ID_MAIN_ACTIVITY_LOADER:
                 Uri contentUri = DbContract.RemindersEntry.CONTENT_URI;
                 String sortOrder = DbContract.RemindersEntry.COLUMN_END_DATE + " ASC";
 

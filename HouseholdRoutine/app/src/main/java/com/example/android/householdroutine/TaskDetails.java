@@ -230,7 +230,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     }
 
     /**
-     * Gets automatically started by a background thread to load all reminders, that are not outdated, from the database
+     * Gets automatically started by a background thread to load the task details from the database
      *
      * @param loaderId
      * @param bundle
@@ -296,6 +296,9 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
      */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        if(loader.getId() == ID_TASK_DETAILS_CHECKLIST_LOADER) {
+            if(mAdapter != null)
+                mAdapter.swapCursor(null);
+        }
     }
 }

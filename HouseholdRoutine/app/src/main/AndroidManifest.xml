@@ -28,12 +28,20 @@
         <activity
             android:name=".CreateTask"
             android:label="@string/new_task_title"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".TaskDetails"
             android:label="@string/task_details_label"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".Extras"
+            android:label="@string/extras_title"
             android:parentActivityName=".MainActivity"/>
-        <receiver android:name=".Notification.AlarmReceiver"/>
+
+        <receiver android:name=".Notification.AlarmReceiver" />
+
+
     </application>
 
 </manifest>

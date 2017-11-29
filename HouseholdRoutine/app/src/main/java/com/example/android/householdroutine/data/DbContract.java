@@ -21,6 +21,8 @@ public class DbContract {
     static final String PATH_USER_POINTS_SUM = "user_points_sum";
     static final String PATH_USER_POINTS_REMINDERS_COUNT = "user_points_reminders_count";
     static final String PATH_INFORMATION_SETS = "information_sets";
+    static final String PATH_INFORMATIONS = "informations";
+    static final String PATH_FULL_INFORMATION = "full_information";
 
     /**
      * Reminders table
@@ -217,6 +219,14 @@ public class DbContract {
                 .appendPath(PATH_INFORMATION_SETS)
                 .build();
 
+        // Inner joins the information_sets table with the informations table
+        // Returns _id, name, description, url and source
+        public static final Uri FULL_INFORMATION_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_FULL_INFORMATION)
+                .build();
+
+
+
         public static final String TABLE_NAME = "information_sets";
         public static final String COLUMN_INFORMATION_ID = "information_id";
         public static final String COLUMN_URL = "url";
@@ -232,6 +242,32 @@ public class DbContract {
         /**
          * Returns the content uri for a specific row using the id
          * @param id information set id
+         */
+        public static Uri buildUriWithId(long id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+    }
+
+    /**
+     * informations and informations_de table
+     */
+    public static final class InformationsEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_INFORMATIONS)
+                .build();
+
+        public static final String TABLE_NAME = "informations";
+        public static final String TABLE_NAME_DE = "informations_de";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DESCRIPTION = "description";
+
+
+        /**
+         * Returns the content uri for a specific row using the id
+         * @param id information id
          */
         public static Uri buildUriWithId(long id) {
             return CONTENT_URI.buildUpon()

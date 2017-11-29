@@ -35,6 +35,7 @@ public class DbContentProvider extends ContentProvider {
     public static final int CODE_USER_POINTS_REMINDERS_COUNT = 602;
     public static final int CODE_INFORMATION_SETS = 700;
     public static final int CODE_INFORMATION_SETS_WITH_ID = 701;
+    public static final int CODE_FULL_INFORMATION = 702;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DbHelper mDbOpenHelper;
@@ -76,6 +77,8 @@ public class DbContentProvider extends ContentProvider {
         matcher.addURI(authority, DbContract.PATH_INFORMATION_SETS, CODE_INFORMATION_SETS);
         // URI : content://CONTENT_AUTHORITY/information_sets/ */
         matcher.addURI(authority, DbContract.PATH_INFORMATION_SETS + "/#/", CODE_INFORMATION_SETS_WITH_ID);
+        // URI : URI : content://CONTENT_AUTHORITY/full_information
+        matcher.addURI(authority, DbContract.PATH_FULL_INFORMATION, CODE_FULL_INFORMATION);
 
 
         return matcher;
@@ -399,6 +402,32 @@ public class DbContentProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
+                break;
+            case CODE_FULL_INFORMATION:
+                String informationSetsTable = DbContract.InformationSetsEntry.TABLE_NAME;
+                String informationsTable;
+                switch (Locale.getDefault().getLanguage()) {
+                    case "de":
+                        informationsTable = DbContract.InformationsEntry.TABLE_NAME_DE;
+                        break;
+                    default:
+                        informationsTable = DbContract.InformationsEntry.TABLE_NAME;
+                }
+                // select information_sets._id, informations.name, informations.description,
+                // information_sets.url, information_sets.source from information_sets inner join
+                // informations ON information_sets.information_id = informations._id;
+                String fullInformationQuery = "select " +
+                        informationSetsTable + "." + DbContract.InformationSetsEntry._ID + ", " +
+                        informationsTable + "." + DbContract.InformationsEntry.COLUMN_NAME + ", " +
+                        informationsTable + "." + DbContract.InformationsEntry.COLUMN_DESCRIPTION + ", " +
+                        informationSetsTable + "." + DbContract.InformationSetsEntry.COLUMN_URL + ", " +
+                        informationSetsTable + "." + DbContract.InformationSetsEntry.COLUMN_SOURCE +
+                        " from " + informationSetsTable + " inner join " + informationsTable + " ON " +
+                        informationSetsTable + "." + DbContract.InformationSetsEntry.COLUMN_INFORMATION_ID +
+                        " = " + informationsTable + "." + DbContract.InformationsEntry._ID + ";";
+                cursor = mDbOpenHelper.getReadableDatabase().rawQuery(
+                        fullInformationQuery,
+                        null);
                 break;
 
             default:
