@@ -30,6 +30,11 @@ public class DbContentProvider extends ContentProvider {
     public static final int CODE_PREDEFINED_CHECKLIST = 400;
     public static final int CODE_PREDEFINED_CHECKLIST_WITH_ID = 401;
     public static final int CODE_FULL_PREDEFINED_CHECKLIST = 500;
+    public static final int CODE_USER_POINTS = 600;
+    public static final int CODE_USER_POINTS_SUM = 601;
+    public static final int CODE_USER_POINTS_REMINDERS_COUNT = 602;
+    public static final int CODE_INFORMATION_SETS = 700;
+    public static final int CODE_INFORMATION_SETS_WITH_ID = 701;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DbHelper mDbOpenHelper;
@@ -59,8 +64,18 @@ public class DbContentProvider extends ContentProvider {
         matcher.addURI(authority, DbContract.PATH_PREDEFINED_CHECKLIST, CODE_PREDEFINED_CHECKLIST);
         // URI : content://CONTENT_AUTHORITY/predefined_checklist/ */
         matcher.addURI(authority, DbContract.PATH_PREDEFINED_CHECKLIST + "/#", CODE_PREDEFINED_CHECKLIST_WITH_ID);
-        // URI : content:/CONTENT_AUTHORITY/full_predefined_checklist
+        // URI : content://CONTENT_AUTHORITY/full_predefined_checklist
         matcher.addURI(authority, DbContract.PATH_FULL_PREDEFINED_CHECKLIST, CODE_FULL_PREDEFINED_CHECKLIST);
+        // URI : content://CONTENT_AUTHORITY/user_points
+        matcher.addURI(authority, DbContract.PATH_USER_POINTS, CODE_USER_POINTS);
+        // URI : content://CONTENT_AUTHORITY/user_points_sum
+        matcher.addURI(authority, DbContract.PATH_USER_POINTS_SUM, CODE_USER_POINTS_SUM);
+        // URI : content://CONTENT_AUTHORITY/user_points_reminders_count
+        matcher.addURI(authority, DbContract.PATH_USER_POINTS_REMINDERS_COUNT, CODE_USER_POINTS_REMINDERS_COUNT);
+        // URI : content://CONTENT_AUTHORITY/information_sets
+        matcher.addURI(authority, DbContract.PATH_INFORMATION_SETS, CODE_INFORMATION_SETS);
+        // URI : content://CONTENT_AUTHORITY/information_sets/ */
+        matcher.addURI(authority, DbContract.PATH_INFORMATION_SETS + "/#/", CODE_INFORMATION_SETS_WITH_ID);
 
 
         return matcher;
@@ -351,6 +366,41 @@ public class DbContentProvider extends ContentProvider {
                 cursor = mDbOpenHelper.getReadableDatabase().rawQuery(fullChecklistQuery, null);
                 break;
 
+            case CODE_USER_POINTS_REMINDERS_COUNT:
+                // select count(points) as reminder from user_points where type='reminder';
+                String userPointsRemindersCountQuery = " select count(" +
+                        DbContract.UserPointsEntry.COLUMN_POINTS + ") as " +
+                        DbContract.UserPointsEntry.REMINDERS_COUNT + " from " +
+                        DbContract.UserPointsEntry.TABLE_NAME + " where " +
+                        DbContract.UserPointsEntry.COLUMN_TYPE + "='" +
+                        DbContract.UserPointsEntry.TYPE_REMINDER + "';";
+                cursor = mDbOpenHelper.getReadableDatabase().rawQuery(
+                        userPointsRemindersCountQuery,
+                        null);
+                break;
+
+            case CODE_USER_POINTS_SUM:
+                // select SUM(points) as points from user_points
+                String userPointsSumQuery = " select SUM(" +
+                        DbContract.UserPointsEntry.COLUMN_POINTS + ") as " +
+                        DbContract.UserPointsEntry.REWARDED_POINTS + " from " +
+                        DbContract.UserPointsEntry.TABLE_NAME + ";";
+                cursor = mDbOpenHelper.getReadableDatabase().rawQuery(
+                        userPointsSumQuery,
+                        null);
+                break;
+
+            case CODE_INFORMATION_SETS:
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        DbContract.InformationSetsEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unkown Uri: " + uri);
         }
@@ -390,6 +440,14 @@ public class DbContentProvider extends ContentProvider {
                     return DbContract.ChecklistEntry.buildChecklistUriWithId(_id);
                 } else
                     throw new SQLException("Insert error for uri: " + uri);
+            case CODE_USER_POINTS:
+                _id = db.insert(DbContract.UserPointsEntry.TABLE_NAME, null, contentValues);
+                if (_id >= 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    return DbContract.UserPointsEntry.buildUriWithId(_id);
+                } else {
+                    throw new SQLException("Insert error for uri: " + uri);
+                }
             default:
                 throw new IllegalArgumentException("Unkown uri: " + uri);
         }
@@ -494,8 +552,22 @@ public class DbContentProvider extends ContentProvider {
                         DbContract.ChecklistEntry._ID + "=?",
                         idSelectionArg
                 );
+                break;
+            case CODE_INFORMATION_SETS_WITH_ID:
+                String information_id = uri.getLastPathSegment();
+                String[] informationSelectionArg = new String[]{information_id};
+                updatedRows = mDbOpenHelper.getWritableDatabase().update(
+                        DbContract.InformationSetsEntry.TABLE_NAME,
+                        contentValues,
+                        DbContract.InformationSetsEntry._ID + "=?",
+                        informationSelectionArg
+                );
+                break;
+            default:
+                throw new IllegalArgumentException("Unkown uri: " + uri);
         }
-
+        if (updatedRows != 0)
+            getContext().getContentResolver().notifyChange(uri, null);
         return updatedRows;
     }
 }

@@ -63,7 +63,6 @@ public class FakeReminders {
         testData.put(DbContract.RemindersEntry.COLUMN_START_DATE, today);
         fakeEndDate = today + TimeUnit.DAYS.toMillis((int) (Math.random()*10));
         testData.put(DbContract.RemindersEntry.COLUMN_END_DATE, fakeEndDate);
-        testData.put(DbContract.RemindersEntry.COLUMN_OUTDATED, 0);
         int type = (int) (Math.random()*2);
         testData.put(DbContract.RemindersEntry.COLUMN_TYPE, type);
         return testData;

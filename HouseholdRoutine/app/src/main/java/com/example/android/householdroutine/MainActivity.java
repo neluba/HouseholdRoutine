@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return new CursorLoader(this,
                         contentUri,
                         MAIN_ACTIVITY_PROJECTION,
-                        DbContract.RemindersEntry.COLUMN_OUTDATED + "= 0",
+                        null,
                         null,
                         sortOrder);
             default:

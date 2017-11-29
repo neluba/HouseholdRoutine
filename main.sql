@@ -9,7 +9,7 @@ Target Server Type    : SQLite
 Target Server Version : 30808
 File Encoding         : 65001
 
-Date: 2017-11-23 13:24:51
+Date: 2017-11-29 15:23:10
 */
 
 PRAGMA foreign_keys = OFF;
@@ -27,6 +27,51 @@ CREATE TABLE "checklist" (
 
 -- ----------------------------
 -- Records of checklist
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for informations
+-- ----------------------------
+DROP TABLE IF EXISTS "main"."informations";
+CREATE TABLE "informations" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"name"  TEXT NOT NULL,
+"description"  TEXT NOT NULL
+);
+
+-- ----------------------------
+-- Records of informations
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for informations_de
+-- ----------------------------
+DROP TABLE IF EXISTS "main"."informations_de";
+CREATE TABLE "informations_de" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"name"  TEXT NOT NULL,
+"description"  TEXT NOT NULL
+);
+
+-- ----------------------------
+-- Records of informations_de
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for information_sets
+-- ----------------------------
+DROP TABLE IF EXISTS "main"."information_sets";
+CREATE TABLE "information_sets" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"information_id"  INTEGER NOT NULL,
+"url"  TEXT NOT NULL,
+"source"  TEXT NOT NULL,
+"obtained"  INTEGER NOT NULL,
+"obtainable"  INTEGER NOT NULL
+);
+
+-- ----------------------------
+-- Records of information_sets
 -- ----------------------------
 
 -- ----------------------------
@@ -106,7 +151,6 @@ CREATE TABLE "reminders" (
 "description"  TEXT(5012),
 "startDate"  INTEGER NOT NULL,
 "endDate"  INTEGER NOT NULL,
-"outdated"  INTEGER NOT NULL,
 "type"  INTEGER NOT NULL
 );
 
@@ -127,5 +171,30 @@ INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_reminders', 3);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_reminders_de', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_checklist', 6);
 INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_checklist_de', 0);
-INSERT INTO "main"."sqlite_sequence" VALUES ('reminders', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('checklist', 0);
+INSERT INTO "main"."sqlite_sequence" VALUES ('user_points', 4);
+INSERT INTO "main"."sqlite_sequence" VALUES ('reminders', 0);
+INSERT INTO "main"."sqlite_sequence" VALUES ('information_sets', 0);
+INSERT INTO "main"."sqlite_sequence" VALUES ('informations', 0);
+INSERT INTO "main"."sqlite_sequence" VALUES ('informations_de', 0);
+
+-- ----------------------------
+-- Table structure for user_points
+-- ----------------------------
+DROP TABLE IF EXISTS "main"."user_points";
+CREATE TABLE "user_points" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"title"  TEXT,
+"description"  TEXT,
+"points"  INTEGER,
+"date"  INTEGER,
+"type"  TEXT NOT NULL
+);
+
+-- ----------------------------
+-- Records of user_points
+-- ----------------------------
+INSERT INTO "main"."user_points" VALUES (1, 'test1', null, 10, 12316545613, 'reminder');
+INSERT INTO "main"."user_points" VALUES (2, 'test2', null, 10, 12316545613, 'reminder');
+INSERT INTO "main"."user_points" VALUES (3, 'test3', null, 10, 12316545613, 'reminder');
+INSERT INTO "main"."user_points" VALUES (4, 'test4', null, 30, 4564161616, 'daily-bonus');

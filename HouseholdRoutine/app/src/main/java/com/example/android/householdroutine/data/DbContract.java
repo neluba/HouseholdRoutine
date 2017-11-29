@@ -8,17 +8,23 @@ import android.provider.BaseColumns;
  */
 
 public class DbContract {
-    public static final String CONTENT_AUTHORITY = "com.example.android.householdroutine";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    static final String CONTENT_AUTHORITY = "com.example.android.householdroutine";
+    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public  static final String PATH_REMINDERS = "reminders";
-    public static final String PATH_CHECKLIST = "checklist";
-    public static final String PATH_SINGLE_CHECKLIST = "single_checklist";
-    public static final String PATH_PREDEFINED_REMINDERS = "predefined_reminders";
-    public static final String PATH_PREDEFINED_CHECKLIST = "predefined_checklist";
-    public static final String PATH_FULL_PREDEFINED_CHECKLIST = "full_predefined_checklist";
+    static final String PATH_REMINDERS = "reminders";
+    static final String PATH_CHECKLIST = "checklist";
+    static final String PATH_SINGLE_CHECKLIST = "single_checklist";
+    static final String PATH_PREDEFINED_REMINDERS = "predefined_reminders";
+    static final String PATH_PREDEFINED_CHECKLIST = "predefined_checklist";
+    static final String PATH_FULL_PREDEFINED_CHECKLIST = "full_predefined_checklist";
+    static final String PATH_USER_POINTS = "user_points";
+    static final String PATH_USER_POINTS_SUM = "user_points_sum";
+    static final String PATH_USER_POINTS_REMINDERS_COUNT = "user_points_reminders_count";
+    static final String PATH_INFORMATION_SETS = "information_sets";
 
-
+    /**
+     * Reminders table
+     */
     public static final class RemindersEntry implements BaseColumns {
         /** Base content URI for the reminders table  **/
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
@@ -36,15 +42,11 @@ public class DbContract {
         public static final String COLUMN_START_DATE = "startDate";
         // end time in millis -- integer
         public static final String COLUMN_END_DATE = "endDate";
-        // 0 if the reminder is currently activ, otherwise 1 -- integer
-        public static final String COLUMN_OUTDATED = "outdated";
         // type = 0 for reminder and type = 1 for checklist -- integer
         public static final String COLUMN_TYPE = "type";
 
         public static final int TYPE_REMINDER = 0;
         public static final int TYPE_CHECKLIST = 1;
-        public static final int OUTDATED_FALSE = 0;
-        public static final int OUTDATED_TRUE = 1;
 
         /**
          * Returns the content uri for a specific row using the id of a reminder
@@ -58,7 +60,9 @@ public class DbContract {
     }
 
 
-
+    /**
+     * Checklist table
+     */
     public static final class ChecklistEntry implements BaseColumns {
         // Base content URI for the checklist table
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
@@ -97,7 +101,9 @@ public class DbContract {
     }
 
 
-
+    /**
+     * predefined_reminders and predefined_reminders_de table
+     */
     public static final class PredefinedRemindersEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_PREDEFINED_REMINDERS)
@@ -122,6 +128,9 @@ public class DbContract {
         }
     }
 
+    /**
+     * predefined_checklist and predefined_checklist_de table
+     */
     public static final class PredefinedChecklistEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_PREDEFINED_CHECKLIST)
@@ -149,6 +158,85 @@ public class DbContract {
         }
     }
 
+    /**
+     * user_points table
+     */
+    public static final class UserPointsEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_USER_POINTS)
+                .build();
+        /**
+         * returns as single row and column with the accumulated rewarded points. The column name
+         * is set in the variable REWARDED_POINTS
+         */
+        public static final Uri USER_POINTS_SUM_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_USER_POINTS_SUM)
+                .build();
+        /**
+         *  returns a single row and column with the reminders count. The column name is set in the
+         *  variable REMINDERS_COUNT
+         */
+        public static final Uri USER_POINTS_REMINDERS_COUNT_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_USER_POINTS_REMINDERS_COUNT)
+                .build();
+
+        public static final String TABLE_NAME = "user_points";
+        public static final String COLUMN_TITLE = "title";
+        public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_POINTS = "points";
+        public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_TYPE = "type";
+
+        // reminder as a type for the type column
+        public static final String TYPE_REMINDER = "reminder";
+        // points rewarded for different types
+        public static final int POINTS_REMINDER = 10;
+
+        // column name for retrieving the reminders count
+        public static final String REMINDERS_COUNT = "reminders";
+        // column name for retrieving the rewarded points
+        public static final String REWARDED_POINTS = "points";
 
 
+        /**
+         * Returns the content uri for a specific row using the id
+         * @param id rewarded points id
+         */
+        public static Uri buildUriWithId(long id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+    }
+
+    /**
+     * informations_sets table
+     */
+    public static final class InformationSetsEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_INFORMATION_SETS)
+                .build();
+
+        public static final String TABLE_NAME = "information_sets";
+        public static final String COLUMN_INFORMATION_ID = "information_id";
+        public static final String COLUMN_URL = "url";
+        public static final String COLUMN_SOURCE = "source";
+        public static final String COLUMN_OBTAINED = "obtained";
+        public static final String COLUMN_OBTAINABLE = "obtainable";
+
+        public static final int OBTAINABLE_TRUE = 1;
+        public static final int OBTAINABLE_FALSE = 0;
+        public static final int OBTAINED_TRUE = 1;
+        public static final int OBTAINED_FALSE = 0;
+
+        /**
+         * Returns the content uri for a specific row using the id
+         * @param id information set id
+         */
+        public static Uri buildUriWithId(long id) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(Long.toString(id))
+                    .build();
+        }
+    }
 }

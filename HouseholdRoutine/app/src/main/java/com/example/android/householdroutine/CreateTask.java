@@ -406,7 +406,6 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             contentValues.put(DbContract.RemindersEntry.COLUMN_DESCRIPTION, descriptionString);
             contentValues.put(DbContract.RemindersEntry.COLUMN_START_DATE, System.currentTimeMillis());
             contentValues.put(DbContract.RemindersEntry.COLUMN_END_DATE, calendar.getTimeInMillis());
-            contentValues.put(DbContract.RemindersEntry.COLUMN_OUTDATED, DbContract.RemindersEntry.OUTDATED_FALSE);
             contentValues.put(DbContract.RemindersEntry.COLUMN_TYPE, DbContract.RemindersEntry.TYPE_REMINDER);
 
             Uri uri = getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);
@@ -443,7 +442,6 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             contentValues.put(DbContract.RemindersEntry.COLUMN_DESCRIPTION, descriptionString);
             contentValues.put(DbContract.RemindersEntry.COLUMN_START_DATE, System.currentTimeMillis());
             contentValues.put(DbContract.RemindersEntry.COLUMN_END_DATE, calendar.getTimeInMillis());
-            contentValues.put(DbContract.RemindersEntry.COLUMN_OUTDATED, DbContract.RemindersEntry.OUTDATED_FALSE);
             contentValues.put(DbContract.RemindersEntry.COLUMN_TYPE, DbContract.RemindersEntry.TYPE_CHECKLIST);
 
             Uri uri = getContentResolver().insert(DbContract.RemindersEntry.CONTENT_URI, contentValues);

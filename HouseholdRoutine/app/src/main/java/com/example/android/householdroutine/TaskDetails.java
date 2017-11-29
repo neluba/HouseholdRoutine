@@ -26,6 +26,8 @@ import com.example.android.householdroutine.Notification.StartReminder;
 import com.example.android.householdroutine.data.DbContract;
 import com.example.android.householdroutine.utilities.UserPoints;
 
+import java.util.concurrent.TimeUnit;
+
 public class TaskDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int ID_TASK_DETAILS_LOADER = 13;
@@ -40,6 +42,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     private DetailsRecyclerViewAdapter mAdapter;
 
     private long reminderId = -1;
+    private long endDate = 0;
     private int reminderType = DbContract.RemindersEntry.TYPE_REMINDER;
 
     // Reminder projection
@@ -48,7 +51,6 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
             DbContract.RemindersEntry.COLUMN_DESCRIPTION,
             DbContract.RemindersEntry.COLUMN_START_DATE,
             DbContract.RemindersEntry.COLUMN_END_DATE,
-            DbContract.RemindersEntry.COLUMN_OUTDATED,
             DbContract.RemindersEntry.COLUMN_TYPE};
 
     // Index values for the reminder details
@@ -56,8 +58,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     public static final int INDEX_DESCRIPTION = 1;
     public static final int INDEX_START_DATE = 2;
     public static final int INDEX_END_DATE = 3;
-    public static final int INDEX_OUTDATED = 4;
-    public static final int INDEX_TYPE = 5;
+    public static final int INDEX_TYPE = 4;
 
     // Checklist projection
     public static final String[] CHECKLIST_PROJECTION = {
@@ -107,9 +108,9 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         String startDateString = DateUtils.formatDateTime(this, startDate, flags);
         mStartDate.setText(startDateString);
         long endDate = cursor.getLong(INDEX_END_DATE);
+        this.endDate = endDate;
         String endDateString = DateUtils.formatDateTime(this, endDate, flags);
         mEndDate.setText(endDateString);
-
     }
 
     /**
@@ -202,9 +203,13 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                             null);
                 }
 
-                // reward points
-                if(!justDelete)
-                    UserPoints.awardReminderCompletePoints(getApplicationContext());
+                // reward points if the reminder is older than 10 minutes
+                if(!justDelete && System.currentTimeMillis()-endDate > TimeUnit.MINUTES.toMillis(10)) {
+                    UserPoints.rewardReminderCompletePoints(
+                            getApplicationContext(),
+                            mName.getText().toString(),
+                            mDescription.getText().toString());
+                }
                 // cancel the reminder if it is still open
                 StartReminder.cancelReminder(reminderId, getApplicationContext());
 

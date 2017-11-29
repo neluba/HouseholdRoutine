@@ -6,6 +6,30 @@ CREATE TABLE "checklist" (
 "completed"  INTEGER
 );
 
+DROP TABLE IF EXISTS "informations";
+CREATE TABLE "informations"(
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"name"  TEXT NOT NULL,
+"description"  TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS "informations_de";
+CREATE TABLE "informations_de" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"name"  TEXT NOT NULL,
+"description"  TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS "information_sets";
+CREATE TABLE "information_sets" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"information_id"  INTEGER NOT NULL,
+"url"  TEXT NOT NULL,
+"source"  TEXT NOT NULL,
+"obtained"  INTEGER NOT NULL,
+"obtainable"  INTEGER NOT NULL
+);
+
 DROP TABLE IF EXISTS "predefined_checklist";
 CREATE TABLE "predefined_checklist" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -25,7 +49,6 @@ CREATE TABLE "reminders" (
 "description"  TEXT(5012),
 "startDate"  INTEGER NOT NULL,
 "endDate"  INTEGER NOT NULL,
-"outdated"  INTEGER NOT NULL,
 "type"  INTEGER NOT NULL
 );
 
@@ -45,4 +68,14 @@ CREATE TABLE "predefined_reminders_de" (
 "description"  TEXT(5012),
 "checklist"  INTEGER,
 "type"  INTEGER
+);
+
+DROP TABLE IF EXISTS "user_points";
+CREATE TABLE "user_points" (
+"_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"title"  TEXT,
+"description"  TEXT,
+"points"  INTEGER,
+"date"  INTEGER,
+"type"  TEXT NOT NULL
 );
