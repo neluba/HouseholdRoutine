@@ -1,5 +1,6 @@
 package com.example.android.householdroutine;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -38,6 +40,8 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
     private RecyclerView mRecyclerView;
     private ExtrasRecyclerViewAdapter mAdapter;
     private ConstraintLayout mNoInformationConstraintLayout;
+    private CardView pointsCardView;
+    private CardView remindersCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,27 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
         mRecyclerView.setNestedScrollingEnabled(false);
         mAdapter = new ExtrasRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+        pointsCardView = (CardView) findViewById(R.id.extras_points_card);
+        remindersCardView = (CardView)findViewById(R.id.extras_reminders_card);
+
+        // set onclock listeners
+        pointsCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Extras.this, RewardedPoints.class);
+                startActivity(intent);
+            }
+        });
+
+        remindersCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Extras.this, RewardedPoints.class);
+                startActivity(intent);
+            }
+        });
+
 
         // start the cursor loaders
         getSupportLoaderManager().initLoader(ID_INFORMATIONS_LOADER, null, this);
@@ -166,7 +191,6 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
         switch (loader.getId()) {
             case ID_INFORMATIONS_LOADER:
                 if (data.getCount() > 0) {
-                    data.moveToFirst();
                     mAdapter.swapCursor(data);
                     showRecyclerView();
                 } else

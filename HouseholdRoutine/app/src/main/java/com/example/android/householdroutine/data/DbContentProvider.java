@@ -382,6 +382,18 @@ public class DbContentProvider extends ContentProvider {
                         null);
                 break;
 
+            case CODE_USER_POINTS:
+                // select SUM(points) as points from user_points
+                cursor = mDbOpenHelper.getReadableDatabase().query(
+                        DbContract.UserPointsEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+
             case CODE_USER_POINTS_SUM:
                 // select SUM(points) as points from user_points
                 String userPointsSumQuery = " select SUM(" +

@@ -67,4 +67,17 @@
     <string name="information_source_label">Source: </string>
     <string name="information_source_example" translatable="false">Source example</string>
     <string name="extras_no_information_label">Complete reminders to unlock a new information</string>
+
+    <!-- rewarded points activity -->
+    <string name="rewarded_points_label">Rewarded Points</string>
+    <string name="no_rewarded_points_label">You have not earned any points yet</string>
+    <string name="points_title_example" translatable="false">Title example</string>
+    <string name="points_description_example" translatable="false">Description example</string>
+    <string name="points_date_label">Completed at:</string>
+    <string name="points_date_example" translatable="false">1.1.1990</string>
+    <string name="points_points_label">Points:</string>
+    <string name="points_points_example" translatable="false">130</string>
+    <string name="points_type_example" translatable="false">Reminder</string>
+    <string name="points_type_reminder">Reminder</string>
+    <string name="points_no_description">-No description-</string>
 </resources>

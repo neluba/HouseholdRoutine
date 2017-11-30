@@ -283,7 +283,6 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                 }
                 break;
             case ID_TASK_DETAILS_CHECKLIST_LOADER:
-                data.moveToFirst();
                 buildChecklistUi(data);
                 break;
         }

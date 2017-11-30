@@ -43,4 +43,10 @@
     <string name="extras_reminders">Beendete Erinnerungen:</string>
     <string name="information_source_label">"Quelle: "</string>
     <string name="extras_no_information_label">Schließe Erinnerungen ab, um neue Informationen freizuschalten.</string>
+    <string name="rewarded_points_label">Erhaltene Punkte</string>
+    <string name="no_rewarded_points_label">Sie haben noch keine Punkte erhalten</string>
+    <string name="points_date_label">Abgeschlossem am:</string>
+    <string name="points_points_label">Punkte:</string>
+    <string name="points_type_reminder">Erinnerung</string>
+    <string name="points_no_description">-Keine Beschreibung-</string>
 </resources>
