@@ -3,11 +3,15 @@ package com.example.android.householdroutine;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.householdroutine.data.DbContract;
@@ -31,6 +35,9 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
 
     private TextView points;
     private TextView reminders;
+    private RecyclerView mRecyclerView;
+    private ExtrasRecyclerViewAdapter mAdapter;
+    private ConstraintLayout mNoInformationConstraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,17 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
 
         points = (TextView) findViewById(R.id.extras_points);
         reminders = (TextView) findViewById(R.id.extras_reminders);
+        mRecyclerView = (RecyclerView) findViewById(R.id.extras_recycler_view);
+        mNoInformationConstraintLayout = (ConstraintLayout) findViewById(R.id.extras_no_information);
+
+        // initialize recyclerview
+        LinearLayoutManager layoutManager =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mAdapter = new ExtrasRecyclerViewAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         // start the cursor loaders
         getSupportLoaderManager().initLoader(ID_INFORMATIONS_LOADER, null, this);
@@ -76,6 +94,22 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
             remindersCount = "0";
 
         reminders.setText(remindersCount);
+    }
+
+    /**
+     * Shows the recyclerview and hides that "no information" message
+     */
+    private void showRecyclerView() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mNoInformationConstraintLayout.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Shows the "no information" message and hides the recyclerview
+     */
+    private void hideRecyclerView() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mNoInformationConstraintLayout.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -133,8 +167,10 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
             case ID_INFORMATIONS_LOADER:
                 if (data.getCount() > 0) {
                     data.moveToFirst();
-                    // todo
-                }
+                    mAdapter.swapCursor(data);
+                    showRecyclerView();
+                } else
+                    hideRecyclerView();
                 break;
             case ID_POINTS_LOADER:
                 data.moveToFirst();
@@ -154,6 +190,6 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
      */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mAdapter.swapCursor(null);
     }
 }

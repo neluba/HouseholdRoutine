@@ -42,7 +42,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
     private DetailsRecyclerViewAdapter mAdapter;
 
     private long reminderId = -1;
-    private long endDate = 0;
+    private long startDate = 0;
     private int reminderType = DbContract.RemindersEntry.TYPE_REMINDER;
 
     // Reminder projection
@@ -101,6 +101,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         mName.setText(cursor.getString(INDEX_NAME));
         mDescription.setText(cursor.getString(INDEX_DESCRIPTION));
         long startDate = cursor.getLong(INDEX_START_DATE);
+        this.startDate = startDate;
         int flags = DateUtils.FORMAT_SHOW_DATE
                 | DateUtils.FORMAT_NUMERIC_DATE
                 | DateUtils.FORMAT_SHOW_YEAR
@@ -108,7 +109,6 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         String startDateString = DateUtils.formatDateTime(this, startDate, flags);
         mStartDate.setText(startDateString);
         long endDate = cursor.getLong(INDEX_END_DATE);
-        this.endDate = endDate;
         String endDateString = DateUtils.formatDateTime(this, endDate, flags);
         mEndDate.setText(endDateString);
     }
@@ -204,7 +204,7 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                 }
 
                 // reward points if the reminder is older than 10 minutes
-                if(!justDelete && System.currentTimeMillis()-endDate > TimeUnit.MINUTES.toMillis(10)) {
+                if(!justDelete && System.currentTimeMillis()-startDate > TimeUnit.MINUTES.toMillis(10)) {
                     UserPoints.rewardReminderCompletePoints(
                             getApplicationContext(),
                             mName.getText().toString(),

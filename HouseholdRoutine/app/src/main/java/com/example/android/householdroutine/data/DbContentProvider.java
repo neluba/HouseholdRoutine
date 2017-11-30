@@ -415,7 +415,8 @@ public class DbContentProvider extends ContentProvider {
                 }
                 // select information_sets._id, informations.name, informations.description,
                 // information_sets.url, information_sets.source from information_sets inner join
-                // informations ON information_sets.information_id = informations._id;
+                // informations ON information_sets.information_id = informations._id where
+                // information_sets.obtained = 1;
                 String fullInformationQuery = "select " +
                         informationSetsTable + "." + DbContract.InformationSetsEntry._ID + ", " +
                         informationsTable + "." + DbContract.InformationsEntry.COLUMN_NAME + ", " +
@@ -424,7 +425,9 @@ public class DbContentProvider extends ContentProvider {
                         informationSetsTable + "." + DbContract.InformationSetsEntry.COLUMN_SOURCE +
                         " from " + informationSetsTable + " inner join " + informationsTable + " ON " +
                         informationSetsTable + "." + DbContract.InformationSetsEntry.COLUMN_INFORMATION_ID +
-                        " = " + informationsTable + "." + DbContract.InformationsEntry._ID + ";";
+                        " = " + informationsTable + "." + DbContract.InformationsEntry._ID +
+                        " where " + informationSetsTable + "." + DbContract.InformationSetsEntry.COLUMN_OBTAINED +
+                        " = " + DbContract.InformationSetsEntry.OBTAINABLE_TRUE + ";";
                 cursor = mDbOpenHelper.getReadableDatabase().rawQuery(
                         fullInformationQuery,
                         null);

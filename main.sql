@@ -9,7 +9,7 @@ Target Server Type    : SQLite
 Target Server Version : 30808
 File Encoding         : 65001
 
-Date: 2017-11-29 15:23:10
+Date: 2017-11-30 16:07:56
 */
 
 PRAGMA foreign_keys = OFF;
@@ -42,6 +42,8 @@ CREATE TABLE "informations" (
 -- ----------------------------
 -- Records of informations
 -- ----------------------------
+INSERT INTO "main"."informations" VALUES (1, 'information 1 ', 'sfhioashnf ansfasn nasf lnaf as');
+INSERT INTO "main"."informations" VALUES (2, 'information 2', 'description dasdadada ad adaahjks jasd bdjknasdnkdasndasnjkad');
 
 -- ----------------------------
 -- Table structure for informations_de
@@ -56,6 +58,8 @@ CREATE TABLE "informations_de" (
 -- ----------------------------
 -- Records of informations_de
 -- ----------------------------
+INSERT INTO "main"."informations_de" VALUES (1, 'information 1', 'duiasdb ldnasdas jddasndasnd');
+INSERT INTO "main"."informations_de" VALUES (2, 'information 2', 'dilahs daskbd ajhsdbh asjdbad ajlbdawbdil w dibawbdbawd biawd');
 
 -- ----------------------------
 -- Table structure for information_sets
@@ -73,6 +77,8 @@ CREATE TABLE "information_sets" (
 -- ----------------------------
 -- Records of information_sets
 -- ----------------------------
+INSERT INTO "main"."information_sets" VALUES (1, 1, 'https://www.google.de/', 'test', 1, 0);
+INSERT INTO "main"."information_sets" VALUES (2, 2, 'https://www.google.de/', 'test2', 1, 1);
 
 -- ----------------------------
 -- Table structure for predefined_checklist
@@ -174,9 +180,9 @@ INSERT INTO "main"."sqlite_sequence" VALUES ('predefined_checklist_de', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('checklist', 0);
 INSERT INTO "main"."sqlite_sequence" VALUES ('user_points', 4);
 INSERT INTO "main"."sqlite_sequence" VALUES ('reminders', 0);
-INSERT INTO "main"."sqlite_sequence" VALUES ('information_sets', 0);
-INSERT INTO "main"."sqlite_sequence" VALUES ('informations', 0);
-INSERT INTO "main"."sqlite_sequence" VALUES ('informations_de', 0);
+INSERT INTO "main"."sqlite_sequence" VALUES ('information_sets', 2);
+INSERT INTO "main"."sqlite_sequence" VALUES ('informations', 2);
+INSERT INTO "main"."sqlite_sequence" VALUES ('informations_de', 2);
 
 -- ----------------------------
 -- Table structure for user_points
@@ -194,7 +200,7 @@ CREATE TABLE "user_points" (
 -- ----------------------------
 -- Records of user_points
 -- ----------------------------
-INSERT INTO "main"."user_points" VALUES (1, 'test1', null, 10, 12316545613, 'reminder');
-INSERT INTO "main"."user_points" VALUES (2, 'test2', null, 10, 12316545613, 'reminder');
-INSERT INTO "main"."user_points" VALUES (3, 'test3', null, 10, 12316545613, 'reminder');
+INSERT INTO "main"."user_points" VALUES (1, 'test1', null, 10, 12316545613, 'daily-bonus');
+INSERT INTO "main"."user_points" VALUES (2, 'test2', null, 10, 12316545613, 'daily-bonus');
+INSERT INTO "main"."user_points" VALUES (3, 'test3', null, 10, 12316545613, 'daily-bonus');
 INSERT INTO "main"."user_points" VALUES (4, 'test4', null, 30, 4564161616, 'daily-bonus');

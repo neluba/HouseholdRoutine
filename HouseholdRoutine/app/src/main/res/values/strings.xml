@@ -62,4 +62,9 @@
     <string name="extras_points_example" translatable="false">750</string>
     <string name="extras_reminders">Completed reminders:</string>
     <string name="extras_reminders_example" translatable="false">75</string>
+    <string name="information_title_example" translatable="false">Title example</string>
+    <string name="information_description_example" translatable="false">Description example</string>
+    <string name="information_source_label">Source: </string>
+    <string name="information_source_example" translatable="false">Source example</string>
+    <string name="extras_no_information_label">Complete reminders to unlock a new information</string>
 </resources>

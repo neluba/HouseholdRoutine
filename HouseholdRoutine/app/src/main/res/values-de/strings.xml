@@ -41,4 +41,6 @@
     <string name="extras_title">Belohnungen</string>
     <string name="extras_points">Punkte:</string>
     <string name="extras_reminders">Beendete Erinnerungen:</string>
+    <string name="information_source_label">"Quelle: "</string>
+    <string name="extras_no_information_label">Schließe Erinnerungen ab, um neue Informationen freizuschalten.</string>
 </resources>
