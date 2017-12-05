@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.householdroutine">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -43,6 +44,17 @@
             android:parentActivityName=".Extras"/>
 
         <receiver android:name=".Notification.AlarmReceiver" />
+        <service android:name=".Notification.RestartAlarmService"/>
+        
+        <service android:name=".Notification.RestartAlarmJob"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <receiver android:name=".Notification.RestartAlarmReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

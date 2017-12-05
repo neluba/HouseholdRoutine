@@ -12,15 +12,17 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.android.householdroutine.Notification.RestartAlarmService;
 import com.example.android.householdroutine.data.DbContract;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    // TODO outdated reminders sollen ganz oben angezeigt werden und müssen besonders gekennzeichnet werden
+    private static boolean firstStart = false;
 
     public static final int ID_MAIN_ACTIVITY_LOADER = 13;
     public static final String EXTRA_REMINDER_ID = "reminder_id";
@@ -52,6 +54,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // restart all alarms if the app was started for the first time after a force close
+        if (!firstStart) {
+            Intent service = new Intent(this, RestartAlarmService.class);
+            startService(service);
+            firstStart = true;
+            Log.d("test_service: " , "service started");
+        }
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_main);
         mRemindersCompleted = (ConstraintLayout) findViewById(R.id.reminders_completed);
 
@@ -63,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mAdapter = new MainRecyclerViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-
-        // TODO DEBUG ONLY - muss noch entfernt werden!!
-        //FakeReminders.insertFakeData(this);
 
         // fab initialize
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -79,6 +86,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // initialize the cursorLoader
         getSupportLoaderManager().initLoader(ID_MAIN_ACTIVITY_LOADER, null, this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            firstStart = false;
+        }
     }
 
     /**
