@@ -21,9 +21,10 @@
         android:layout_height="32dp"
         android:layout_gravity="center_vertical"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/icon_description"
         android:onClick="removeItem"
         android:scaleType="fitCenter"
         android:tint="@color/secondary_text"
-        app:srcCompat="@drawable/ic_clear_black_48dp" android:contentDescription="@string/icon_description"/>
+        app:srcCompat="@drawable/ic_clear_black_48dp" />
 
 </LinearLayout>

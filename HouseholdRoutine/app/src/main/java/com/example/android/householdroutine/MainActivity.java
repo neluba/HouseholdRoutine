@@ -12,7 +12,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Intent service = new Intent(this, RestartAlarmService.class);
             startService(service);
             firstStart = true;
-            Log.d("test_service: " , "service started");
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_main);

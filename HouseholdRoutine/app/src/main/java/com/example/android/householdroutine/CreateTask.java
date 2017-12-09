@@ -115,11 +115,13 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         mPredefinedRemindersRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_reminders_recycler_view);
         mPredefinedChecklistRecyclerView = (RecyclerView) findViewById(R.id.new_task_predefined_checklist);
 
+
         // initialize predefined reminder recycler view
         LinearLayoutManager layoutManagerReminders =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mPredefinedRemindersRecyclerView.setLayoutManager(layoutManagerReminders);
-        mPredefinedRemindersRecyclerView.setHasFixedSize(true);
+        mPredefinedRemindersRecyclerView.setHasFixedSize(false);
+        mPredefinedRemindersRecyclerView.setNestedScrollingEnabled(false);
         mPredefinedRemindersAdapter = new PredefinedRemindersRecyclerViewAdapter(this, name, description);
         mPredefinedRemindersRecyclerView.setAdapter(mPredefinedRemindersAdapter);
 
@@ -128,6 +130,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mPredefinedChecklistRecyclerView.setLayoutManager(layoutManagerChecklist);
         mPredefinedChecklistRecyclerView.setHasFixedSize(false);
+        mPredefinedChecklistRecyclerView.setNestedScrollingEnabled(false);
         mPredefinedChecklistAdapter = new PredefinedChecklistRecyclerViewAdapter(this, name, description);
         mPredefinedChecklistRecyclerView.setAdapter(mPredefinedChecklistAdapter);
 
@@ -292,14 +295,17 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         if (checklistItems != null && checklistItems.size() > 0) {
             LayoutInflater inflater = (LayoutInflater)
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            int counter = 0;
             for (String item : checklistItems) {
                 final View checklistItemView = inflater
-                        .inflate(R.layout.create_task_checklist_item, null);
+                        .inflate(R.layout.create_task_checklist_item, ownChecklistView, false);
 
                 TextView itemTextView = (TextView) checklistItemView
                         .findViewById(R.id.own_checklist_item_name);
                 itemTextView.setText(item);
-                ownChecklistView.addView(checklistItemView);
+                // add the new view above the input field
+                ownChecklistView.addView(checklistItemView, counter);
+                counter++;
             }
         }
 
@@ -330,14 +336,14 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
      */
     private void showChecklistView() {
         checklistView.setVisibility(View.VISIBLE);
-        remindersView.setVisibility(View.INVISIBLE);
+        remindersView.setVisibility(View.GONE);
     }
 
     /**
      * Shows the reminders view and hides the checklist view
      */
     private void hideChecklistView() {
-        checklistView.setVisibility(View.INVISIBLE);
+        checklistView.setVisibility(View.GONE);
         remindersView.setVisibility(View.VISIBLE);
     }
 
@@ -346,14 +352,14 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
      */
     private void showOwnChecklistView() {
         ownChecklistView.setVisibility(View.VISIBLE);
-        mPredefinedChecklistRecyclerView.setVisibility(View.INVISIBLE);
+        mPredefinedChecklistRecyclerView.setVisibility(View.GONE);
     }
 
     /**
      * Shows the predefined checklist view and hides the own checklist view
      */
     private void hideOwnChecklistView() {
-        ownChecklistView.setVisibility(View.INVISIBLE);
+        ownChecklistView.setVisibility(View.GONE);
         mPredefinedChecklistRecyclerView.setVisibility(View.VISIBLE);
     }
 
@@ -480,15 +486,15 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
         String name = ownChecklistAddItemName.getText().toString();
         if (!TextUtils.isEmpty(name)) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View checklistItemView = inflater.inflate(R.layout.create_task_checklist_item, null);
+            final View checklistItemView = inflater.inflate(R.layout.create_task_checklist_item, ownChecklistView, false);
 
             TextView itemTextView = (TextView) checklistItemView.findViewById(R.id.own_checklist_item_name);
             itemTextView.setText(name);
-            ownChecklistView.addView(checklistItemView);
-
+            // add the view directly above the input field
+            ownChecklistView.addView(checklistItemView, checklistItems.size());
             checklistItems.add(name);
-
             ownChecklistAddItemName.setText("");
+
         }
     }
 
