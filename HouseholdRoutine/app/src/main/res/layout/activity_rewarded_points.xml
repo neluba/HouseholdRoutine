@@ -10,8 +10,8 @@
         android:id="@+id/rewarded_points_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:visibility="invisible" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/no_rewarded_points"
@@ -24,9 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/no_rewarded_points_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -38,10 +37,10 @@
             android:id="@+id/no_rewarded_points_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
             android:text="@string/no_rewarded_points_label"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@color/primary_text"
             android:textSize="18sp"

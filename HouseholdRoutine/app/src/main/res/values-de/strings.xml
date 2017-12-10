@@ -49,4 +49,8 @@
     <string name="points_points_label">Punkte:</string>
     <string name="points_type_reminder">Erinnerung</string>
     <string name="points_no_description">-Keine Beschreibung-</string>
+    <string name="extras_information_label">Freigeschaltete Informationen:</string>
+    <string name="extras_no_information_icon">Icon für keine Informationen</string>
+    <string name="no_rewarded_points_icon">Icon für keine Punkte</string>
+    <string name="reminders_complete_icon_description">Icon für keine Erinnerungen</string>
 </resources>

@@ -5,6 +5,7 @@
     <!-- keine erinnerungen oder checklisten in der main activity -->
     <string name="reminders_completed_label">No reminders set</string>
     <string name="reminders_completed_description">Create new reminders to schedule your tasks</string>
+    <string name="reminders_complete_icon_description">No reminders set icon</string>
 
     <!-- menü einträge -->
     <string name="action_settings">Settings</string>
@@ -62,15 +63,18 @@
     <string name="extras_points_example" translatable="false">750</string>
     <string name="extras_reminders">Completed reminders:</string>
     <string name="extras_reminders_example" translatable="false">75</string>
+    <string name="extras_information_label">Unlocked information:</string>
     <string name="information_title_example" translatable="false">Title example</string>
     <string name="information_description_example" translatable="false">Description example</string>
     <string name="information_source_label">Source: </string>
     <string name="information_source_example" translatable="false">Source example</string>
     <string name="extras_no_information_label">Complete reminders to unlock a new information</string>
+    <string name="extras_no_information_icon">No information icon</string>
 
     <!-- rewarded points activity -->
     <string name="rewarded_points_label">Rewarded Points</string>
     <string name="no_rewarded_points_label">You have not earned any points yet</string>
+    <string name="no_rewarded_points_icon">No points icon</string>
     <string name="points_title_example" translatable="false">Title example</string>
     <string name="points_description_example" translatable="false">Description example</string>
     <string name="points_date_label">Completed at:</string>

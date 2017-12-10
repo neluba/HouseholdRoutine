@@ -37,6 +37,7 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
 
     private TextView points;
     private TextView reminders;
+    private TextView informationLabel;
     private RecyclerView mRecyclerView;
     private ExtrasRecyclerViewAdapter mAdapter;
     private ConstraintLayout mNoInformationConstraintLayout;
@@ -52,6 +53,7 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
         reminders = (TextView) findViewById(R.id.extras_reminders);
         mRecyclerView = (RecyclerView) findViewById(R.id.extras_recycler_view);
         mNoInformationConstraintLayout = (ConstraintLayout) findViewById(R.id.extras_no_information);
+        informationLabel = (TextView) findViewById(R.id.extras_information_label);
 
         // initialize recyclerview
         LinearLayoutManager layoutManager =
@@ -125,6 +127,7 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
      * Shows the recyclerview and hides that "no information" message
      */
     private void showRecyclerView() {
+        informationLabel.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mNoInformationConstraintLayout.setVisibility(View.INVISIBLE);
     }
@@ -133,7 +136,8 @@ public class Extras extends AppCompatActivity implements LoaderManager.LoaderCal
      * Shows the "no information" message and hides the recyclerview
      */
     private void hideRecyclerView() {
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        informationLabel.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
         mNoInformationConstraintLayout.setVisibility(View.VISIBLE);
     }
 
