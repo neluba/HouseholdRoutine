@@ -84,7 +84,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
     public static final int PREDEF_REMINDERS_INDEX_DESCRIPTION = 1;
 
     public static final String[] PREDEFINED_CHECKLIST_PROJECTION = {
-            DbContract.PredefinedChecklistEntry._ID,
+            DbContract.PredefinedRemindersEntry.COLUMN_CHECKLIST,
             DbContract.PredefinedRemindersEntry.COLUMN_NAME,
             DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION,
             DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES};

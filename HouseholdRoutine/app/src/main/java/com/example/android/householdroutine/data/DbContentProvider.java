@@ -357,13 +357,13 @@ public class DbContentProvider extends ContentProvider {
                         predefChecklistTable = DbContract.PredefinedChecklistEntry.TABLE_NAME;
                 }
 
-                String fullChecklistQuery = " select " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID + ", " +
+                String fullChecklistQuery = " select " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_CHECKLIST + ", " +
                         predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_NAME + ", " +
                         predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_DESCRIPTION + ", " +
                         predefChecklistTable + "." + DbContract.PredefinedChecklistEntry.COLUMN_ITEM_NAMES +
                         " from " + predefRemindersTable +
                         " inner join " + predefChecklistTable +
-                        " on " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry._ID +
+                        " on " + predefRemindersTable + "." + DbContract.PredefinedRemindersEntry.COLUMN_CHECKLIST +
                         " = " + predefChecklistTable + "." + DbContract.PredefinedChecklistEntry._ID +
                         " where type = 1;";
                 cursor = mDbOpenHelper.getReadableDatabase().rawQuery(fullChecklistQuery, null);

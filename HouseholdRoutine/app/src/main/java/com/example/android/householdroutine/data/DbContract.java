@@ -139,7 +139,7 @@ public class DbContract {
                 .build();
 
         // Inner joins the predefined reminders table with the predefined checklist table
-        // Returns _id, name, description and item_names from the database
+        // Returns checklistId, name, description and item_names from the database
         public static final Uri FULL_PREDEFINED_CHECKLIST_CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_FULL_PREDEFINED_CHECKLIST)
                 .build();

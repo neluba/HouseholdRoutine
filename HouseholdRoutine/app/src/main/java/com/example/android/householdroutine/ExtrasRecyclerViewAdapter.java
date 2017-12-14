@@ -44,6 +44,7 @@ public class ExtrasRecyclerViewAdapter extends RecyclerView.Adapter<ExtrasRecycl
         holder.nameView.setText(name);
         // information description
         String description = mCursor.getString(Extras.INDEX_DESCRIPTION);
+        description = description.replace("\\n", "\n");
         holder.descriptionView.setText(description);
         // information source
         String source = mCursor.getString(Extras.INDEX_SOURCE);
