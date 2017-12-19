@@ -1,5 +1,6 @@
 package com.example.android.householdroutine;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,8 +26,6 @@ import android.widget.TextView;
 import com.example.android.householdroutine.Notification.StartReminder;
 import com.example.android.householdroutine.data.DbContract;
 import com.example.android.householdroutine.utilities.UserPoints;
-
-import java.util.concurrent.TimeUnit;
 
 public class TaskDetails extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -155,11 +154,27 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
         if (id == R.id.complete_task) {
             showCompletePopup(false);
         }
+        if(id == R.id.repeat_task) {
+            repeatReminder();
+        }
         if(id == R.id.delete_task) {
             showCompletePopup(true);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Starts a new activity where the user can set a new time for this reminder
+     */
+    private void repeatReminder() {
+        Intent intent = new Intent(TaskDetails.this, RepeatTask.class);
+        intent.putExtra(MainActivity.EXTRA_REMINDER_ID, reminderId);
+        intent.putExtra(MainActivity.EXTRA_REMINDER_TYPE, reminderType);
+        intent.putExtra(MainActivity.EXTRA_REMINDER_NAME, mName.getText().toString());
+        intent.putExtra(MainActivity.EXTRA_REMINDER_DESCRIPTION, mDescription.getText().toString());
+
+        startActivity(intent);
     }
 
     /**
@@ -203,8 +218,8 @@ public class TaskDetails extends AppCompatActivity implements LoaderManager.Load
                             null);
                 }
 
-                // reward points if the reminder is older than 10 minutes
-                if(!justDelete && System.currentTimeMillis()-startDate > TimeUnit.MINUTES.toMillis(10)) {
+                // reward points
+                if(!justDelete) {
                     UserPoints.rewardReminderCompletePoints(
                             getApplicationContext(),
                             mName.getText().toString(),

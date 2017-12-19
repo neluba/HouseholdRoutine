@@ -395,6 +395,7 @@ public class CreateTask extends AppCompatActivity implements LoaderManager.Loade
             return;
         }
         String descriptionString = description.getText().toString();
+
         if (TextUtils.isEmpty(endDate.getText().toString())) {
             Toast.makeText(CreateTask.this, R.string.new_task_date_missing, Toast.LENGTH_SHORT).show();
             return;

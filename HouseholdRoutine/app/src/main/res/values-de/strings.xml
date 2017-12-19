@@ -53,4 +53,7 @@
     <string name="extras_no_information_icon">Icon für keine Informationen</string>
     <string name="no_rewarded_points_icon">Icon für keine Punkte</string>
     <string name="reminders_complete_icon_description">Icon für keine Erinnerungen</string>
+    <string name="task_details_repeat">Wiederholen</string>
+    <string name="repeat_label">Erinnerung wiederholen</string>
+    <string name="repeat_info_label">Hiermit wird die Erinnerung abgeschlossen und Sie können eine neue Zeit setzen</string>
 </resources>

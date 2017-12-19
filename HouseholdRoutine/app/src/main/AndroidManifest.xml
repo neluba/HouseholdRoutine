@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.householdroutine">
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -34,27 +35,33 @@
             android:name=".TaskDetails"
             android:label="@string/task_details_label"
             android:parentActivityName=".MainActivity" />
+
+        <activity android:name=".RepeatTask"
+            android:label="@string/repeat_label"
+            android:parentActivityName=".TaskDetails"/>
         <activity
             android:name=".Extras"
             android:label="@string/extras_title"
             android:parentActivityName=".MainActivity" />
-
-        <activity android:name=".RewardedPoints"
+        <activity
+            android:name=".RewardedPoints"
             android:label="@string/rewarded_points_label"
-            android:parentActivityName=".Extras"/>
+            android:parentActivityName=".Extras" />
 
         <receiver android:name=".Notification.AlarmReceiver" />
-        <service android:name=".Notification.RestartAlarmService"/>
-        
-        <service android:name=".Notification.RestartAlarmJob"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
-        <receiver android:name=".Notification.RestartAlarmReceiver" android:enabled="true">
+        <service android:name=".Notification.RestartAlarmService" />
+        <service
+            android:name=".Notification.RestartAlarmJob"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver
+            android:name=".Notification.RestartAlarmReceiver"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

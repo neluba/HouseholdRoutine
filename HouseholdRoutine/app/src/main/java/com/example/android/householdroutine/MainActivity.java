@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final int ID_MAIN_ACTIVITY_LOADER = 13;
     public static final String EXTRA_REMINDER_ID = "reminder_id";
+    public static final String EXTRA_REMINDER_TYPE = "reminder_type";
+    public static final String EXTRA_REMINDER_NAME = "reminder_name";
+    public static final String EXTRA_REMINDER_DESCRIPTION = "reminder_description";
 
     // Recyclerview variables
     private RecyclerView mRecyclerView;

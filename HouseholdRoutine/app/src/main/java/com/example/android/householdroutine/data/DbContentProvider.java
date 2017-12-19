@@ -584,11 +584,30 @@ public class DbContentProvider extends ContentProvider {
                       @Nullable String selection, @Nullable String[] selectionArgs) {
         int match = sUriMatcher.match(uri);
         int updatedRows = 0;
-
+        String[] idSelectionArg;
         switch (match) {
+            case CODE_REMINDERS_WITH_ID:
+                String reminder_id = uri.getLastPathSegment();
+                idSelectionArg = new String[]{reminder_id};
+
+                updatedRows = mDbOpenHelper.getWritableDatabase().update(
+                        DbContract.RemindersEntry.TABLE_NAME,
+                        contentValues,
+                        DbContract.RemindersEntry._ID + "=?",
+                        idSelectionArg
+                );
+                break;
+            case CODE_CHECKLIST:
+                updatedRows = mDbOpenHelper.getWritableDatabase().update(
+                        DbContract.ChecklistEntry.TABLE_NAME,
+                        contentValues,
+                        selection,
+                        selectionArgs
+                );
+                break;
             case CODE_CHECKLIST_WITH_ID:
                 String checklist_id = uri.getLastPathSegment();
-                String[] idSelectionArg = new String[]{checklist_id};
+                idSelectionArg = new String[]{checklist_id};
 
                 updatedRows = mDbOpenHelper.getWritableDatabase().update(
                         DbContract.ChecklistEntry.TABLE_NAME,
@@ -599,12 +618,12 @@ public class DbContentProvider extends ContentProvider {
                 break;
             case CODE_INFORMATION_SETS_WITH_ID:
                 String information_id = uri.getLastPathSegment();
-                String[] informationSelectionArg = new String[]{information_id};
+                idSelectionArg = new String[]{information_id};
                 updatedRows = mDbOpenHelper.getWritableDatabase().update(
                         DbContract.InformationSetsEntry.TABLE_NAME,
                         contentValues,
                         DbContract.InformationSetsEntry._ID + "=?",
-                        informationSelectionArg
+                        idSelectionArg
                 );
                 break;
             default:
