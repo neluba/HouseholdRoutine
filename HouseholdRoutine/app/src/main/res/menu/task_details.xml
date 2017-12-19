@@ -9,7 +9,7 @@
     <item android:id="@+id/repeat_task"
         android:orderInCategory="2"
         android:title="@string/task_details_repeat"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/delete_task"
         android:orderInCategory="3"
