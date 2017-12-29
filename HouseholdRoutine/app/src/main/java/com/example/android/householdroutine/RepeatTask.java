@@ -21,6 +21,7 @@ import com.example.android.householdroutine.utilities.UserPoints;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class RepeatTask extends AppCompatActivity {
 
@@ -80,7 +81,8 @@ public class RepeatTask extends AppCompatActivity {
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
-                picker.getDatePicker().setMinDate(System.currentTimeMillis());
+                picker.getDatePicker().setMinDate(System.currentTimeMillis()-
+                        TimeUnit.SECONDS.toMillis(1));
                 picker.show();
             }
         });
