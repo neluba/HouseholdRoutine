@@ -41,9 +41,9 @@ public class DbContract {
         public static final String COLUMN_DESCRIPTION = "description";
         // id of the checklist. -1 if it doesn't have a checklist. It needs to be set, when type is 1
         // start time in millis -- integer
-        public static final String COLUMN_START_DATE = "startDate";
+        public static final String COLUMN_START_DATE = "start_date";
         // end time in millis -- integer
-        public static final String COLUMN_END_DATE = "endDate";
+        public static final String COLUMN_END_DATE = "end_date";
         // type = 0 for reminder and type = 1 for checklist -- integer
         public static final String COLUMN_TYPE = "type";
 

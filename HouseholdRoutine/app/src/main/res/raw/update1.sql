@@ -1,0 +1,3 @@
+INSERT INTO information_sets VALUES (8, 8, 'http://www.sueddeutsche.de/wissen/muell-kreislauf-das-deutsche-recycling-maerchen-1.3491734', 'Süddeutsche Zeitung', 0, 1);
+INSERT INTO informations_de VALUES (8, 'Es ist wichtig den Müll richtig zu trennen', 'In den Großstädten gibt es bis zu 50% Fehlwürfe in der Gelben Tonne. Diese werden dann zwar aussortiert, können aber nicht mehr recycelt werden.');
+INSERT INTO informations VALUES (8, 'It''s important to seperate the waste', 'Waste that wasn''t seperated correctly will eventually get sorted out, but it won''t get recycelt that way.');

@@ -47,8 +47,8 @@ CREATE TABLE "reminders" (
 "_id"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 "name"  TEXT(255) NOT NULL,
 "description"  TEXT(5012),
-"startDate"  INTEGER NOT NULL,
-"endDate"  INTEGER NOT NULL,
+"start_date"  INTEGER NOT NULL,
+"end_date"  INTEGER NOT NULL,
 "type"  INTEGER NOT NULL
 );
 
@@ -87,7 +87,7 @@ INSERT INTO predefined_checklist VALUES (3, '["Window cleaner","Garbage bags","S
 
 INSERT INTO predefined_checklist_de VALUES (1, '["Hausmüll","Papier","Glas","Batterien"]');
 INSERT INTO predefined_checklist_de VALUES (2, '["Küche","Wohnzimmer","Badezimmer","Schlafzimmer"]');
-INSERT INTO predefined_checklist_de VALUES (3, '["Fenster reiniger","Müllbeutel","Putzschwämme","Spülmittel","Staubsaugerbeutel","Waschmittel"]');
+INSERT INTO predefined_checklist_de VALUES (3, '["Glasreiniger","Müllbeutel","Putzschwämme","Spülmittel","Staubsaugerbeutel","Waschmittel"]');
 
 INSERT INTO predefined_reminders VALUES (1, 'Take out the trash', '', 0, 0);
 INSERT INTO predefined_reminders VALUES (2, 'Garbage collection', 'Set up the trash for the garbage collection. ', 0, 0);
@@ -103,7 +103,7 @@ INSERT INTO predefined_reminders VALUES (11, 'Dispose of garbage', null, 1, 1);
 INSERT INTO predefined_reminders VALUES (12, 'Clean the apartment', null, 2, 1);
 INSERT INTO predefined_reminders VALUES (13, 'Buy cleaning accessories', 'Things to buy, to keep the household clean', 3, 1);
 
-INSERT INTO predefined_reminders_de VALUES (1, 'Müll raus bringen', null, 0, 0);
+INSERT INTO predefined_reminders_de VALUES (1, 'Müll rausbringen', null, 0, 0);
 INSERT INTO predefined_reminders_de VALUES (2, 'Müllabfuhr', 'Den Müll für die Müllabfahr nach draußen stellen', 0, 0);
 INSERT INTO predefined_reminders_de VALUES (3, 'Altpapier entsorgen', null, 0, 0);
 INSERT INTO predefined_reminders_de VALUES (4, 'Alte Batterien entsorgen', 'Daran denken, die alten Batterien in bestimmten Sammelbehältern zu entsorgen', 0, 0);
@@ -124,6 +124,7 @@ INSERT INTO information_sets VALUES (4, 4, 'https://www.wissenschaftsjahr.de/201
 INSERT INTO information_sets VALUES (5, 5, 'https://www.nabu.de/natur-und-landschaft/meere/muellkippe-meer/muellkippemeer.html', 'NABU', 0, 1);
 INSERT INTO information_sets VALUES (6, 6, 'http://www.dailymail.co.uk/news/article-3049457/Where-computer-goes-die-Shocking-pictures-toxic-electronic-graveyards-Africa-West-dumps-old-PCs-laptops-microwaves-fridges-phones.html', 'MailOnline', 0, 1);
 INSERT INTO information_sets VALUES (7, 7, 'https://www.welt.de/newsticker/dpa_nt/infoline_nt/brennpunkte_nt/article146138404/Deutschland-auf-Platz-sechs.html', 'Welt', 0, 1);
+INSERT INTO information_sets VALUES (8, 8, 'http://www.sueddeutsche.de/wissen/muell-kreislauf-das-deutsche-recycling-maerchen-1.3491734', 'Süddeutsche Zeitung', 0, 1);
 
 INSERT INTO informations_de VALUES (1, 'Deutsche Recyclingquote', 'Deutschland hat die höchste Recyclingsquote in Europa mit 64%.');
 INSERT INTO informations_de VALUES (2, 'Abfallhierachie', 'In der EU ist eine Reihenfolge festgelegt, wie mit dem Abfall umgegangen werden muss. \n1. Vermeidung \n2. Vorbereitung zur Wiederverwendung \n3. Recycling \n4. Sonstige Verwertung \n5. Beseitigung');
@@ -132,6 +133,7 @@ INSERT INTO informations_de VALUES (4, 'Plastikmüll in den Flüssen', 'Die Zehn
 INSERT INTO informations_de VALUES (5, 'Folgen des Plastikmülls in den Meeren für Tiere', 'Jährlich werden mehr als Zehn Millionen Tonnen Abfall in die Ozeane geschwemmt und circa 75% davon sind Kunstoff. Dieser hohe Plastikanteil kostet damit jahrlich bis zu 100.000 Meeressäugern und eine Millionen Meeresvögeln das leben.');
 INSERT INTO informations_de VALUES (6, 'Illegale Deponien für Elektroschrott', 'Ein großer Teil des Elektroschrotts wird von der ganzen Welt aus illegal auf Deponien nach Afrika exportiert. Im Jahr 2014 wurden 41 Millionen Tonnen Elektroschrott dorthin verschiff. Diese Deponien sind extrem Umweltschädigend und enthalten giftige Materialien wie Blei oder Quecksilber.');
 INSERT INTO informations_de VALUES (7, 'Jährliches Müllaufkommen des Deutschen', 'Jeder Deutsche verursacht pro Jahr im Durchschnitt circa 618 Kilogramm Müll.');
+INSERT INTO informations_de VALUES (8, 'Es ist wichtig den Müll richtig zu trennen', 'In den Großstädten gibt es bis zu 50% Fehlwürfe in der Gelben Tonne. Diese werden dann zwar aussortiert, können aber nicht mehr recycelt werden.');
 
 INSERT INTO informations VALUES (1, 'German recycling rate', 'Germany has the highest recycling rate with 64%.');
 INSERT INTO informations VALUES (2, 'Waste hierachy', 'Europe has a fixed order how waste should be handled. \n1. Prevent \n2. Prepare for reuse \n3. Recycling \n4. Other utilization \n5. Dispose');
@@ -140,3 +142,4 @@ INSERT INTO informations VALUES (4, 'Plastic waste in rivers', 'The ten largest 
 INSERT INTO informations VALUES (5, 'Consequences of plastic waste in oceans for animals', 'Over ten million tons of waste gets disposed into the oceans every year. And 75% of this is plasic waste. This high potion of plastic waste costs every year up to 100.000 sea mammals and one million sea birds their lives.');
 INSERT INTO informations VALUES (6, 'Illegal landfills for electric waste', 'A huge amount of electric waste gets exported illegally to African landfills every year from all over the world. Those landfills are extremely harmful to the environment and contain toxic elements such as lead or mercury.');
 INSERT INTO informations VALUES (7, 'Annual waste generation of a German', 'A German citizen generates every year on average 618 kilograms of waste. ');
+INSERT INTO informations VALUES (8, 'It''s important to seperate the waste', 'Waste that wasn''t seperated correctly will eventually get sorted out, but it won''t get recycelt that way.');

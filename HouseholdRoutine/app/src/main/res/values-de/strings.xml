@@ -56,4 +56,5 @@
     <string name="task_details_repeat">Wiederholen</string>
     <string name="repeat_label">Erinnerung wiederholen</string>
     <string name="repeat_info_label">Hiermit wird die Erinnerung abgeschlossen und Sie können eine neue Zeit setzen</string>
+    <string name="notification_channel_name">Erinnerungen</string>
 </resources>
